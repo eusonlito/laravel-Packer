@@ -116,8 +116,8 @@ class Packer
     }
 
     /**
-     * @param $ext
-     * @param $dir
+     * @param  string                              $ext
+     * @param  string                              $dir
      * @param  boolean                             $recursive
      * @throws Exceptions\InvalidArgumentException
      * @return array

@@ -11,8 +11,8 @@ interface ProviderInterface
     public function pack($file, $base);
 
     /**
-     * @param $file
-     * @param $attributes
+     * @param  string $file
+     * @param  array  $attributes
      * @return mixed
      */
     public function tag($file, array $attributes);
