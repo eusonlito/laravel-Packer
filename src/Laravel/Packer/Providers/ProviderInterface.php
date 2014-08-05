@@ -1,11 +1,11 @@
 <?php
 namespace Laravel\Packer\Providers;
 
-interface ProviderInterface {
-
+interface ProviderInterface
+{
     /**
-     * @param string $file
-     * @param string $base
+     * @param  string $file
+     * @param  string $base
      * @return mixed
      */
     public function pack($file, $base);

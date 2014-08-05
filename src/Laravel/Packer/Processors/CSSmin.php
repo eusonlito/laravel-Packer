@@ -37,9 +37,9 @@ class CSSmin
 
     /**
      * @param bool|int $raise_php_limits
-     * If true, PHP settings will be raised if needed
+     *                                   If true, PHP settings will be raised if needed
      */
-    public function __construct($raise_php_limits = TRUE)
+    public function __construct($raise_php_limits = true)
     {
         // Set suggested PHP limits
         $this->memory_limit = 128 * 1048576; // 128MB in bytes
@@ -52,11 +52,11 @@ class CSSmin
 
     /**
      * Minify a string of CSS
-     * @param string $css
-     * @param int|bool $linebreak_pos
+     * @param  string   $css
+     * @param  int|bool $linebreak_pos
      * @return string
      */
-    public function run($css = '', $linebreak_pos = FALSE)
+    public function run($css = '', $linebreak_pos = false)
     {
         if (empty($css)) {
             return '';
@@ -104,7 +104,6 @@ class CSSmin
         $start_index = 0;
         $i = $css_chunk_length; // save initial iterations
         $l = strlen($css);
-
 
         // if the number of characters is 5000 or less, do not chunk
         if ($l <= $css_chunk_length) {
@@ -208,8 +207,8 @@ class CSSmin
 
     /**
      * Does bulk of the minification
-     * @param string $css
-     * @param int|bool $linebreak_pos
+     * @param  string   $css
+     * @param  int|bool $linebreak_pos
      * @return string
      */
     private function minify($css, $linebreak_pos)
@@ -259,12 +258,11 @@ class CSSmin
             $css = preg_replace('/\/\*' . $this->str_slice($placeholder, 1, -1) . '\*\//', '', $css, 1);
         }
 
-
         // Normalize all whitespace strings to single spaces. Easier to work with that way.
         $css = preg_replace('/\s+/', ' ', $css);
 
-		// Fix IE7 issue on matrix filters which browser accept whitespaces between Matrix parameters
-		$css = preg_replace_callback('/\s*filter\:\s*progid:DXImageTransform\.Microsoft\.Matrix\(([^\)]+)\)/', array($this, 'preserve_old_IE_specific_matrix_definition'), $css);
+        // Fix IE7 issue on matrix filters which browser accept whitespaces between Matrix parameters
+        $css = preg_replace_callback('/\s*filter\:\s*progid:DXImageTransform\.Microsoft\.Matrix\(([^\)]+)\)/', array($this, 'preserve_old_IE_specific_matrix_definition'), $css);
 
         // Shorten & preserve calculations calc(...) since spaces are important
         $css = preg_replace_callback('/calc(\(((?:[^\(\)]+|(?1))*)\))/i', array($this, 'replace_calc'), $css);
@@ -321,7 +319,7 @@ class CSSmin
         $css = preg_replace_callback('/([:,\( ]\s*)(attr|color-stop|from|rgba|to|url|(?:-(?:atsc|khtml|moz|ms|o|wap|webkit)-)?(?:calc|max|min|(?:repeating-)?(?:linear|radial)-gradient)|-webkit-gradient)/iS', array($this, 'lowercase_common_functions_values'), $css);
 
         // Put the space back in some cases, to support stuff like
-        // @media screen and (-webkit-min-device-pixel-ratio:0){
+        // @media screen and (-webkit-min-device-pixel-ratio:0) {
         $css = preg_replace('/\band\(/i', 'and (', $css);
 
         // Remove the spaces after the things that should not have spaces after them.
@@ -340,8 +338,8 @@ class CSSmin
         // <percentage> data type: https://developer.mozilla.org/en-US/docs/Web/CSS/percentage
         $css = preg_replace('/([^\\\\]\:|\s)0(?:em|ex|ch|rem|vw|vh|vm|vmin|cm|mm|in|px|pt|pc|%)/iS', '${1}0', $css);
 
-		// 0% step in a keyframe? restore the % unit
-		$css = preg_replace_callback('/(@[a-z\-]*?keyframes[^\{]*?\{)(.*?\}\s*\})/iS', array($this, 'replace_keyframe_zero'), $css);
+        // 0% step in a keyframe? restore the % unit
+        $css = preg_replace_callback('/(@[a-z\-]*?keyframes[^\{]*?\{)(.*?\}\s*\})/iS', array($this, 'replace_keyframe_zero'), $css);
 
         // Replace 0 0; or 0 0 0; or 0 0 0 0; with 0.
         $css = preg_replace('/\:0(?: 0){1,3}(;|\}| \!)/', ':0$1', $css);
@@ -380,7 +378,7 @@ class CSSmin
         // Add "/" back to fix Opera -o-device-pixel-ratio query
         $css = preg_replace('/'. self::QUERY_FRACTION .'/', '/', $css);
 
-		// Replace multiple semi-colons in a row by a single one
+        // Replace multiple semi-colons in a row by a single one
         // See SF bug #1980989
         $css = preg_replace('/;;+/', ';', $css);
 
@@ -419,7 +417,7 @@ class CSSmin
      * compressing, to avoid performance issues running some of the subsequent
      * regexes against large strings chunks.
      *
-     * @param string $css
+     * @param  string $css
      * @return string
      */
     private function extract_data_urls($css)
@@ -441,7 +439,7 @@ class CSSmin
             $start_index = $index + 4; // "url(".length()
             $end_index = $last_index - 1;
             $terminator = $m[1]; // ', " or empty (not quoted)
-            $found_terminator = FALSE;
+            $found_terminator = false;
 
             if (strlen($terminator) === 0) {
                 $terminator = ')';
@@ -452,7 +450,7 @@ class CSSmin
 
                 // endIndex == 0 doesn't really apply here
                 if ($end_index > 0 && substr($css, $end_index - 1, 1) !== '\\') {
-                    $found_terminator = TRUE;
+                    $found_terminator = true;
                     if (')' != $terminator) {
                         $end_index = $this->index_of($css, ')', $end_index);
                     }
@@ -497,7 +495,7 @@ class CSSmin
      * DOES NOT compress invalid hex values.
      * e.g. background-color: #aabbccdd
      *
-     * @param string $css
+     * @param  string $css
      * @return string
      */
     private function compress_hex_colors($css)
@@ -575,6 +573,7 @@ class CSSmin
         $match = preg_replace('/progid\:DXImageTransform\.Microsoft\.Alpha\(Opacity\=/i', 'alpha(opacity=', $match);
 
         $this->preserved_tokens[] = $match;
+
         return $quote . self::TOKEN . (count($this->preserved_tokens) - 1) . '___' . $quote;
     }
 
@@ -586,16 +585,18 @@ class CSSmin
     private function replace_calc($matches)
     {
         $this->preserved_tokens[] = trim(preg_replace('/\s*([\*\/\(\),])\s*/', '$1', $matches[2]));
+
         return 'calc('. self::TOKEN . (count($this->preserved_tokens) - 1) . '___' . ')';
     }
 
-	private function preserve_old_IE_specific_matrix_definition($matches)
-	{
-		$this->preserved_tokens[] = $matches[1];
-		return 'filter:progid:DXImageTransform.Microsoft.Matrix(' . self::TOKEN . (count($this->preserved_tokens) - 1) . '___' . ')';
+    private function preserve_old_IE_specific_matrix_definition($matches)
+    {
+        $this->preserved_tokens[] = $matches[1];
+
+        return 'filter:progid:DXImageTransform.Microsoft.Matrix(' . self::TOKEN . (count($this->preserved_tokens) - 1) . '___' . ')';
     }
 
-	private function replace_keyframe_zero($matches)
+    private function replace_keyframe_zero($matches)
     {
         return $matches[1] . preg_replace('/0\s*,/', '0%,', preg_replace('/\s*0\s*\{/', '0%{', $matches[2]));
     }
@@ -603,7 +604,7 @@ class CSSmin
     private function rgb_to_hex($matches)
     {
         // Support for percentage values rgb(100%, 0%, 45%);
-        if ($this->index_of($matches[1], '%') >= 0){
+        if ($this->index_of($matches[1], '%') >= 0) {
             $rgbcolors = explode(',', str_replace('%', '', $matches[1]));
             for ($i = 0; $i < count($rgbcolors); $i++) {
                 $rgbcolors[$i] = $this->round_number(floatval($rgbcolors[$i]) * 2.55);
@@ -619,7 +620,7 @@ class CSSmin
         }
 
         // Fix for issue #2528093
-        if (!preg_match('/[\s\,\);\}]/', $matches[2])){
+        if (!preg_match('/[\s\,\);\}]/', $matches[2])) {
             $matches[2] = ' ' . $matches[2];
         }
 
@@ -708,9 +709,9 @@ class CSSmin
      * PHP port of Javascript's "indexOf" function for strings only
      * Author: Tubal Martin http://blog.margenn.com
      *
-     * @param string $haystack
-     * @param string $needle
-     * @param int    $offset index (optional)
+     * @param  string $haystack
+     * @param  string $needle
+     * @param  int    $offset   index (optional)
      * @return int
      */
     private function index_of($haystack, $needle, $offset = 0)
@@ -725,12 +726,12 @@ class CSSmin
      * Author: Tubal Martin http://blog.margenn.com
      * Tests: http://margenn.com/tubal/str_slice/
      *
-     * @param string   $str
-     * @param int      $start index
-     * @param int|bool $end index (optional)
+     * @param  string   $str
+     * @param  int      $start index
+     * @param  int|bool $end   index (optional)
      * @return string
      */
-    private function str_slice($str, $start = 0, $end = FALSE)
+    private function str_slice($str, $start = 0, $end = false)
     {
         if ($end !== FALSE && ($start < 0 || $end <= 0)) {
             $max = strlen($str);
@@ -753,12 +754,13 @@ class CSSmin
         }
 
         $slice = ($end === FALSE) ? substr($str, $start) : substr($str, $start, $end - $start);
+
         return ($slice === FALSE) ? '' : $slice;
     }
 
     /**
      * Convert strings like "64M" or "30" to int values
-     * @param mixed $size
+     * @param  mixed $size
      * @return int
      */
     private function normalize_int($size)

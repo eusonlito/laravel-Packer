@@ -1,11 +1,11 @@
 <?php
 namespace Laravel\Packer\Providers;
 
-abstract class ProviderBase
+abstract class BaseProvider
 {
     /**
-     * @param array $files
-     * @param array $attributes
+     * @param  array  $files
+     * @param  array  $attributes
      * @return string
      */
     public function tags($files, array $attributes = [])
@@ -20,7 +20,7 @@ abstract class ProviderBase
     }
 
     /**
-     * @param array $attributes
+     * @param  array  $attributes
      * @return string
      */
     protected function attributes(array $attributes)
@@ -33,4 +33,4 @@ abstract class ProviderBase
 
         return trim($html);
     }
-} 
+}

@@ -6,8 +6,8 @@ use JSMin;
 class JS extends ProviderBase implements ProviderInterface
 {
     /**
-     * @param string $file
-     * @param string $public
+     * @param  string $file
+     * @param  string $public
      * @return string
      */
     public function pack($file, $public)
@@ -16,8 +16,8 @@ class JS extends ProviderBase implements ProviderInterface
     }
 
     /**
-     * @param mixed $file
-     * @param array $attributes
+     * @param  mixed  $file
+     * @param  array  $attributes
      * @return string
      */
     public function tag($file, array $attributes = [])

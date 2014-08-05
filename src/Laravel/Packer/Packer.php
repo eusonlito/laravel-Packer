@@ -1,5 +1,5 @@
 <?php
-namespace Laravel\Packer; 
+namespace Laravel\Packer;
 
 use Laravel\Packer\Providers\JS;
 use Laravel\Packer\Providers\CSS;
@@ -49,7 +49,7 @@ class Packer
     private $provider;
 
     /**
-     * @param array $config
+     * @param  array                               $config
      * @throws Exceptions\InvalidArgumentException
      */
     public function __construct(array $config)
@@ -66,58 +66,62 @@ class Packer
     }
 
     /**
-     * @param mixed $file
-     * @param string $name
+     * @param  mixed  $file
+     * @param  string $name
      * @return this
      */
     public function js($files, $name)
     {
         $this->provider = new Js();
+
         return $this->load('js', $files, $name);
     }
 
     /**
-     * @param mixed $dir
-     * @param string $name
-     * @param boolean $recursive
+     * @param  mixed   $dir
+     * @param  string  $name
+     * @param  boolean $recursive
      * @return this
      */
     public function jsDir($dir, $name, $recursive = false)
     {
         $this->provider = new JS();
+
         return $this->load('js', $this->scanDir('js', $dir, $recursive), $name);
     }
 
     /**
-     * @param mixed $file
-     * @param string $name
+     * @param  mixed  $file
+     * @param  string $name
      * @return this
      */
     public function css($files, $name)
     {
         $this->provider = new CSS();
+
         return $this->load('css', $files, $name);
     }
 
     /**
-     * @param mixed $dir
-     * @param string $name
-     * @param boolean $recursive
+     * @param  mixed   $dir
+     * @param  string  $name
+     * @param  boolean $recursive
      * @return this
      */
     public function cssDir($dir, $name, $recursive = false)
     {
         $this->provider = new CSS();
+
         return $this->load('css', $this->scanDir('css', $dir, $recursive), $name);
     }
 
     /**
      * @param $ext
      * @param $dir
-     * @param boolean $recursive
+     * @param  boolean                             $recursive
      * @throws Exceptions\InvalidArgumentException
      * @return array
-     */ 
+     */
     private function scanDir($ext, $dir, $recursive = false)
     {
         $files = [];
@@ -153,9 +157,9 @@ class Packer
     }
 
     /**
-     * @param string $type
-     * @param mixed $file
-     * @param string $name
+     * @param  string $type
+     * @param  mixed  $file
+     * @param  string $name
      * @return this
      */
     public function load($type, $files, $name)
@@ -184,8 +188,8 @@ class Packer
     }
 
     /**
-     * @param string $name
-     * @param string $location
+     * @param  string $name
+     * @param  string $location
      * @return string
      */
     private function path($name, $location = '')
@@ -204,7 +208,7 @@ class Packer
     }
 
     /**
-     * @param string $name
+     * @param  string                              $name
      * @throws Exceptions\InvalidArgumentException
      * @return string
      */
@@ -225,7 +229,7 @@ class Packer
     }
 
     /**
-     * @param mixed $files
+     * @param  mixed                $files
      * @throws Exceptions\Exception
      * @return this
      */
@@ -271,7 +275,7 @@ class Packer
     }
 
     /**
-     * @param string $dir
+     * @param  string  $dir
      * @return boolean
      */
     private function checkDir($dir)

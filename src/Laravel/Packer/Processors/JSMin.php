@@ -54,7 +54,8 @@
  * @link http://code.google.com/p/jsmin-php/
  */
 
-class JSMin {
+class JSMin
+{
     const ORD_LF            = 10;
     const ORD_SPACE         = 32;
     const ACTION_KEEP_A     = 1;
@@ -81,6 +82,7 @@ class JSMin {
     public static function minify($js)
     {
         $jsmin = new JSMin($js);
+
         return $jsmin->min();
     }
 
@@ -100,11 +102,12 @@ class JSMin {
     public function min()
     {
         if ($this->output !== '') { // min already run
+
             return $this->output;
         }
 
         $mbIntEnc = null;
-        if (function_exists('mb_strlen') && ((int)ini_get('mbstring.func_overload') & 2)) {
+        if (function_exists('mb_strlen') && ((int) ini_get('mbstring.func_overload') & 2)) {
             $mbIntEnc = mb_internal_encoding();
             mb_internal_encoding('8bit');
         }
@@ -149,6 +152,7 @@ class JSMin {
         if ($mbIntEnc !== null) {
             mb_internal_encoding($mbIntEnc);
         }
+
         return $this->output;
     }
 
@@ -157,7 +161,7 @@ class JSMin {
      * ACTION_DELETE_A = Copy B to A. Get the next B.
      * ACTION_DELETE_A_B = Get the next B.
      *
-     * @param int $command
+     * @param  int                                                                 $command
      * @throws JSMin_UnterminatedRegExpException|JSMin_UnterminatedStringException
      */
     protected function action($command)
@@ -191,7 +195,7 @@ class JSMin {
                 $this->a = $this->b;
                 if ($this->a === "'" || $this->a === '"') { // string literal
                     $str = $this->a; // in case needed for exception
-                    for(;;) {
+                    for (;;) {
                         $this->output .= $this->a;
                         $this->lastByteOut = $this->a;
 
@@ -221,11 +225,11 @@ class JSMin {
                 if ($this->b === '/' && $this->isRegexpLiteral()) {
                     $this->output .= $this->a . $this->b;
                     $pattern = '/'; // keep entire pattern in case we need to report it in the exception
-                    for(;;) {
+                    for (;;) {
                         $this->a = $this->get();
                         $pattern .= $this->a;
                         if ($this->a === '[') {
-                            for(;;) {
+                            for (;;) {
                                 $this->output .= $this->a;
                                 $this->a = $this->get();
                                 $pattern .= $this->a;
@@ -275,12 +279,12 @@ class JSMin {
             return true;
         }
 
-		// we have to check for a preceding keyword, and we don't need to pattern
-		// match over the whole output.
-		$recentOutput = substr($this->output, -10);
+        // we have to check for a preceding keyword, and we don't need to pattern
+        // match over the whole output.
+        $recentOutput = substr($this->output, -10);
 
-		// check if return/typeof directly precede a pattern without a space
-		foreach (array('return', 'typeof') as $keyword) {
+        // check if return/typeof directly precede a pattern without a space
+        foreach (array('return', 'typeof') as $keyword) {
             if ($this->a !== substr($keyword, -1)) {
                 // certainly wasn't keyword
                 continue;
@@ -292,13 +296,13 @@ class JSMin {
             }
         }
 
-		// check all keywords
-		if ($this->a === ' ' || $this->a === "\n") {
-			if (preg_match('~(^|[\\s\\S])(?:case|else|in|return|typeof)$~', $recentOutput, $m)) {
-				if ($m[1] === '' || !$this->isAlphaNum($m[1])) {
-					return true;
-				}
-			}
+        // check all keywords
+        if ($this->a === ' ' || $this->a === "\n") {
+            if (preg_match('~(^|[\\s\\S])(?:case|else|in|return|typeof)$~', $recentOutput, $m)) {
+                if ($m[1] === '' || !$this->isAlphaNum($m[1])) {
+                    return true;
+                }
+            }
         }
 
         return false;
@@ -329,13 +333,14 @@ class JSMin {
         if ($c === "\r") {
             return "\n";
         }
+
         return ' ';
     }
 
     /**
      * Does $a indicate end of input?
      *
-     * @param string $a
+     * @param  string $a
      * @return bool
      */
     protected function isEOF($a)
@@ -351,6 +356,7 @@ class JSMin {
     protected function peek()
     {
         $this->lookAhead = $this->get();
+
         return $this->lookAhead;
     }
 
@@ -380,6 +386,7 @@ class JSMin {
                 if (preg_match('/^\\/@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
                     $this->keptComment .= "/{$comment}";
                 }
+
                 return;
             }
         }
@@ -394,7 +401,7 @@ class JSMin {
     {
         $this->get();
         $comment = '';
-        for(;;) {
+        for (;;) {
             $get = $this->get();
             if ($get === '*') {
                 if ($this->peek() === '/') { // end of comment reached
@@ -406,10 +413,11 @@ class JSMin {
                             $this->keptComment = "\n";
                         }
                         $this->keptComment .= "/*!" . substr($comment, 1) . "*/\n";
-                    } else if (preg_match('/^@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
+                    } elseif (preg_match('/^@(?:cc_on|if|elif|else|end)\\b/', $comment)) {
                         // IE conditional
                         $this->keptComment .= "/*{$comment}*/";
                     }
+
                     return;
                 }
             } elseif ($get === null) {
@@ -440,6 +448,7 @@ class JSMin {
                     break;
             }
         }
+
         return $get;
     }
 }
