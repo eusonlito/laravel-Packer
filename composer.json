@@ -1,0 +1,22 @@
+{
+    "name": "laravel/packer",
+    "keywords": ["packer", "minify", "laravel"],
+    "description": "A package for pack css and javascript files",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Lito",
+            "email": "lito@eordes.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4",
+        "illuminate/support": ">=4.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Laravel\\Packer\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
