@@ -1,7 +1,7 @@
 <?php
 namespace Laravel\Packer\Providers;
 
-use Laravel\Packer\Processors\CSSmin;
+use CSSmin;
 
 class CSS extends ProviderBase implements ProviderInterface
 {
@@ -21,7 +21,7 @@ class CSS extends ProviderBase implements ProviderInterface
      * @param array $attributes
      * @return string
      */
-    public function tag($file, array $attributes = array())
+    public function tag($file, array $attributes = [])
     {
         if (is_array($file)) {
             return $this->tags($file, $attributes);

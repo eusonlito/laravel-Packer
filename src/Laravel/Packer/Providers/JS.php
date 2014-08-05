@@ -1,7 +1,7 @@
 <?php
 namespace Laravel\Packer\Providers;
 
-use Laravel\Packer\Processors\JSMin;
+use JSMin;
 
 class JS extends ProviderBase implements ProviderInterface
 {
@@ -12,7 +12,7 @@ class JS extends ProviderBase implements ProviderInterface
      */
     public function pack($file, $public)
     {
-        return JSMin::minify($file);
+        return JSMin::minify(file_get_contents($file));
     }
 
     /**
@@ -20,7 +20,7 @@ class JS extends ProviderBase implements ProviderInterface
      * @param array $attributes
      * @return string
      */
-    public function tag($file, array $attributes = array())
+    public function tag($file, array $attributes = [])
     {
         if (is_array($file)) {
             return $this->tags($file, $attributes);

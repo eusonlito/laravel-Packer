@@ -44,7 +44,7 @@ class PackerServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array('packer');
+		return ['packer'];
 	}
 
     /**

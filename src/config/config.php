@@ -12,44 +12,17 @@ return array(
     |
     */
 
-    'ignore_environments' => ['local'],
+    'ignore_environments' => [],
 
     /*
     |--------------------------------------------------------------------------
-    | CSS build path
+    | Check if some have a recent timestamp
     |--------------------------------------------------------------------------
     |
-    | Packer is an extension that can pack your css files into one build file.
-    | The css_builds_path property is the location where the builded files are
-    | stored. This is relative to your public path. Notice the trailing slash.
-    | Note that this directory must be writeable.
+    | Compare current packed file with all files to pack. If exists one more
+    | recent than packed file, will be packed again.
     |
     */
 
-    'css_build_path' => '/storage/cache/css/',
-
-    /*
-    |--------------------------------------------------------------------------
-    | JS build path
-    |--------------------------------------------------------------------------
-    |
-    | Packer is an extension that can packer your js files into one build file.
-    | The js_build_path property is the location where the builded files are
-    | stored. This is relative to your public path. Notice the trailing slash.
-    | Note that this directory must be writeable.
-    |
-    */
-
-    'js_build_path' => '/storage/cache/js/',
-
-	/*
-    |--------------------------------------------------------------------------
-    | Base URL
-    |--------------------------------------------------------------------------
-    |
-    | You can set the base URL for the links generated with the configuration 
-	| value. By default if empty HTTP_HOST would be used.
-    |
-    */
-	'base_url' => ''
+    'check_timestamps' => true
 );

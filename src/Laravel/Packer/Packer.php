@@ -6,6 +6,8 @@ use Laravel\Packer\Providers\CSS;
 
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use RegexIterator;
+
 use InvalidArgumentException;
 use Exception;
 
@@ -14,39 +16,58 @@ class Packer
     /**
      * @var array
      */
-    protected $files = [];
-
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string
-     */
-    protected $storage;
+    private $files = [];
 
     /**
      * @var array
      */
-    protected $config;
+    private $paths = [];
 
     /**
-     * @var
+     * @var string
+     */
+    private $name = '';
+
+    /**
+     * @var string
+     */
+    private $storage = '';
+
+    /**
+     * @var integer
+     */
+    private $newer = 0;
+
+    /**
+     * @var array
+     */
+    private $config = [];
+
+    /**
+     * @var object
      */
     private $provider;
 
     /**
      * @param array $config
+     * @throws Exceptions\InvalidArgumentException
      */
     public function __construct(array $config)
     {
-        $this->config = $this->config($config);
+        if (!isset($config['ignore_environments']) || !is_array($config['ignore_environments'])) {
+            throw new InvalidArgumentException(sprintf('Missing option %s', 'ignore_environments'));
+        }
+
+        if (!isset($config['check_timestamps'])) {
+            throw new InvalidArgumentException(sprintf('Missing option %s', 'check_timestamps'));
+        }
+
+        $this->config = $config;
     }
 
     /**
      * @param mixed $file
-     * @param [string $name]
+     * @param string $name
      * @return this
      */
     public function js($files, $name)
@@ -56,14 +77,79 @@ class Packer
     }
 
     /**
+     * @param mixed $dir
+     * @param string $name
+     * @param boolean $recursive
+     * @return this
+     */
+    public function jsDir($dir, $name, $recursive = false)
+    {
+        $this->provider = new JS();
+        return $this->load('js', $this->scanDir('js', $dir, $recursive), $name);
+    }
+
+    /**
      * @param mixed $file
-     * @param [string $name]
+     * @param string $name
      * @return this
      */
     public function css($files, $name)
     {
         $this->provider = new CSS();
         return $this->load('css', $files, $name);
+    }
+
+    /**
+     * @param mixed $dir
+     * @param string $name
+     * @param boolean $recursive
+     * @return this
+     */
+    public function cssDir($dir, $name, $recursive = false)
+    {
+        $this->provider = new CSS();
+        return $this->load('css', $this->scanDir('css', $dir, $recursive), $name);
+    }
+
+    /**
+     * @param $ext
+     * @param $dir
+     * @param boolean $recursive
+     * @throws Exceptions\InvalidArgumentException
+     * @return array
+     */ 
+    private function scanDir($ext, $dir, $recursive = false)
+    {
+        $files = [];
+
+        if (is_array($dir)) {
+            foreach ($dir as $each) {
+                $files = array_merge($files, $this->scanDir('css', $each, $recursive));
+            }
+
+            return $files;
+        }
+
+        $dir = $this->path('public', $dir);
+
+        if (!is_dir($dir)) {
+            throw new InvalidArgumentException(sprintf('Folder %s not exists', $dir));
+        }
+
+        if ($recursive) {
+            $Iterator = new RecursiveDirectoryIterator($dir);
+            $Iterator = new RegexIterator(new RecursiveIteratorIterator($Iterator), '/\.'.$ext.'$/i', RegexIterator::MATCH);
+        } else {
+            $Iterator = glob($dir.'*\.'.$ext);
+        }
+
+        $public = $this->path('public');
+
+        foreach ($Iterator as $file) {
+            $files[] = str_replace($public, '', $file);
+        }
+
+        return $files;
     }
 
     /**
@@ -80,15 +166,64 @@ class Packer
             $this->storage = dirname($name).'/';
             $this->name = basename($name);
         } else {
-            $this->storage = str_replace('//', '/', $name.'/');
+            $this->storage = $this->path('', $name.'/');
             $this->name = md5(implode('', $this->files)).'.'.$type;
         }
 
-        $this->file = str_replace('//', '/', public_path($this->storage.$this->name));
+        if (!$this->isLocal() && ($this->config['check_timestamps'] === true)) {
+            $this->newer = max(array_map(function ($file) {
+                return filemtime($this->path('public', $file));
+            }, $this->files));
+
+            $this->name = $this->newer.'-'.$this->name;
+        }
+
+        $this->file = $this->path('public', $this->storage.$this->name);
 
         return $this->process($files);
     }
-	
+
+    /**
+     * @param string $name
+     * @param string $location
+     * @return string
+     */
+    private function path($name, $location = '')
+    {
+        if (!array_key_exists($name, $this->paths)) {
+            $this->setPath($name);
+        }
+
+        $path = str_replace('//', '/', $this->paths[$name].$location);
+
+        if ($name === 'asset') {
+            $path = str_replace(':/', '://', $path);
+        }
+
+        return $path;
+    }
+
+    /**
+     * @param string $name
+     * @throws Exceptions\InvalidArgumentException
+     * @return string
+     */
+    private function setPath($name)
+    {
+        switch ($name) {
+            case '':
+                return $this->paths[$name] = '';
+
+            case 'public':
+                return $this->paths[$name] = public_path();
+
+            case 'asset':
+                return $this->paths[$name] = asset('');
+        }
+
+        throw new InvalidArgumentException(sprintf('This path does not exists %s', $name));
+    }
+
     /**
      * @param mixed $files
      * @throws Exceptions\Exception
@@ -96,20 +231,16 @@ class Packer
      */
     private function process($files)
     {
-        if ($this->local()) {
-            return $this;
-        }
-
-        if (is_file($this->file)) {
+        if ($this->useCache()) {
             return $this;
         }
 
         $this->checkDir(dirname($this->file));
 
-        $fp = fopen($this->file, 'w');
+        $fp = fopen($this->file, 'c');
 
         foreach ($this->files as $file) {
-            $real = public_path($file);
+            $real = $this->path('public', $file);
 
             if (!is_file($real)) {
                 throw new Exception(sprintf('File "%s" not exists', $real));
@@ -121,6 +252,22 @@ class Packer
         fclose($fp);
 
         return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    private function useCache()
+    {
+        if ($this->isLocal()) {
+            return true;
+        } if (!is_file($this->file)) {
+            return false;
+        } if ($this->config['check_timestamps'] === false) {
+            return true;
+        }
+
+        return ($this->newer < filemtime($this->file));
     }
 
     /**
@@ -141,7 +288,7 @@ class Packer
      */
     public function render()
     {
-        if ($this->local()) {
+        if ($this->isLocal()) {
             $list = $this->files;
         } else {
             $list = $this->storage.$this->name;
@@ -150,13 +297,13 @@ class Packer
         return $this->provider->tag($list);
     }
 
-	/**
-	 * @return bool
-	 */
-	protected function local()
-	{
-		return !in_array($this->config['environment'], $this->config['ignore_environments'], true);
-	}
+    /**
+     * @return boolean
+     */
+    protected function isLocal()
+    {
+        return in_array($this->config['environment'], $this->config['ignore_environments'], true);
+    }
 
     /**
      * @return string
@@ -164,19 +311,5 @@ class Packer
     public function __toString()
     {
         return $this->render();
-    }
-
-    /**
-     * @param array $config
-     * @throws Exceptions\InvalidArgumentException
-     * @return array
-     */
-    private function config(array $config)
-    {
-        if (!isset($config['ignore_environments']) || !is_array($config['ignore_environments'])) {
-            throw new InvalidArgumentException(sprintf('Missing option %s', 'ignore_environments'));
-        }
-
-        return $config;
     }
 }
