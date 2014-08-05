@@ -15,7 +15,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Laravel\\Packer\\": "src/"
+            "Laravel\\Packer\\": "src/Laravel/Packer/"
         }
     },
     "minimum-stability": "stable"
