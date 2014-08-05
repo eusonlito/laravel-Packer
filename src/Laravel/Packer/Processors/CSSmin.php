@@ -1,6 +1,4 @@
 <?php
-namespace Laravel\Packer\Processors;
-
 /*!
  * cssmin.php 2.4.8-3
  * Author: Tubal Martin - http://tubalmartin.me/

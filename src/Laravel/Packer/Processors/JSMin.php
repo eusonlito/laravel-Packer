@@ -1,6 +1,4 @@
 <?php
-namespace Laravel\Packer\Processors;
-
 /**
  * JSMin.php - modified PHP implementation of Douglas Crockford's JSMin.
  *
