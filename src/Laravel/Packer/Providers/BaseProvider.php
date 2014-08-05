@@ -19,6 +19,10 @@ abstract class ProviderBase
         return $html;
     }
 
+    /**
+     * @param array $attributes
+     * @return string
+     */
     protected function attributes(array $attributes)
     {
         $html = '';

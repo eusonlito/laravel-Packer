@@ -3,6 +3,7 @@ namespace Laravel\Packer;
 
 use Laravel\Packer\Providers\JS;
 use Laravel\Packer\Providers\CSS;
+
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use InvalidArgumentException;
@@ -13,12 +14,17 @@ class Packer
     /**
      * @var array
      */
-    protected $file = [];
+    protected $files = [];
 
     /**
-     * @var array
+     * @var string
      */
-    protected $dir = [];
+    protected $name;
+
+    /**
+     * @var string
+     */
+    protected $storage;
 
     /**
      * @var array
@@ -66,30 +72,26 @@ class Packer
      * @param string $name
      * @return this
      */
-    public function load($type, $files, $name = '')
+    public function load($type, $files, $name)
     {
-        $this->dir['build'] = $this->config[$type.'_build_path'];
-        $this->dir['full'] = str_replace('//', '/', public_path($this->dir['build']));
+        $this->files = is_array($files) ? $files : [$files];
 
-        $this->file['list'] = is_array($files) ? $files : [$files];
-        $this->file['name'] = $this->name($name, $type);
-        $this->file['full'] = str_replace('//', '/', $this->dir['full'].$this->file['name']);
+        if (preg_match('/\.'.$type.'$/i', $name)) {
+            $this->storage = dirname($name).'/';
+            $this->name = basename($name);
+        } else {
+            $this->storage = str_replace('//', '/', $name.'/');
+            $this->name = md5(implode('', $this->files)).'.'.$type;
+        }
+
+        $this->file = str_replace('//', '/', public_path($this->storage.$this->name));
 
         return $this->process($files);
-    }
-
-    /**
-     * @param string $name
-     * @param string $ext
-     * @return string
-     */
-    public function name($name, $ext)
-    {
-        return $name ?: md5(implode('', $this->files['list'])).'.'.$ext;
     }
 	
     /**
      * @param mixed $files
+     * @throws Exceptions\Exception
      * @return this
      */
     private function process($files)
@@ -98,25 +100,22 @@ class Packer
             return $this;
         }
 
-        if (is_file($this->file['full'])) {
+        if (is_file($this->file)) {
             return $this;
         }
 
-        $this->checkDir($this->dir['full']);
+        $this->checkDir(dirname($this->file));
 
-        $public = public_path();
-        $base = asset('');
+        $fp = fopen($this->file, 'w');
 
-        $fp = fopen($this->file['full'], 'w');
+        foreach ($this->files as $file) {
+            $real = public_path($file);
 
-        foreach ($this->file['list'] as $file) {
-            $file = $public.$file;
-
-            if (!is_file($file)) {
-                throw new Exception(sprintf('File "%s" not exists', $file));
+            if (!is_file($real)) {
+                throw new Exception(sprintf('File "%s" not exists', $real));
             }
 
-            fwrite($fp, $this->provider->pack($file, $base));
+            fwrite($fp, $this->provider->pack($real, $file));
         }
 
         fclose($fp);
@@ -126,32 +125,26 @@ class Packer
 
     /**
      * @param string $dir
-     * @return null
+     * @return boolean
      */
     private function checkDir($dir)
     {
         if (is_dir($dir)) {
-            return;
+            return true;
         }
 
-        if (!mkdir($dir, 0755, true)) {
-            throw new Exception(sprintf('Folder %s couldn\'t be created', $dir));
-        }
+        return mkdir($dir, 0755, true);
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     public function render()
     {
-        $asset = asset('');
-
         if ($this->local()) {
-            $list = array_map(function ($value) use ($asset) {
-                return $asset.$value;
-            }, $this->file['list']);
+            $list = $this->files;
         } else {
-            $list = $asset.$this->dir['build'].$this->file['name'];
+            $list = $this->storage.$this->name;
         }
 
         return $this->provider->tag($list);
@@ -180,14 +173,6 @@ class Packer
      */
     private function config(array $config)
     {
-        if (!isset($config['css_build_path']) || !is_string($config['css_build_path'])) {
-            throw new InvalidArgumentException(sprintf('Missing option %s', 'css_build_path'));
-        }
-
-        if (!isset($config['js_build_path']) || !is_string($config['js_build_path'])) {
-            throw new InvalidArgumentException(sprintf('Missing option %s', 'js_build_path'));
-        }
-
         if (!isset($config['ignore_environments']) || !is_array($config['ignore_environments'])) {
             throw new InvalidArgumentException(sprintf('Missing option %s', 'ignore_environments'));
         }

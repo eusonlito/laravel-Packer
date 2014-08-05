@@ -7,14 +7,13 @@ class CSS extends ProviderBase implements ProviderInterface
 {
     /**
      * @param string $file
-     * @param string $base
+     * @param string $public
      * @return string
      */
-    public function pack($file, $base = '')
+    public function pack($file, $public)
     {
         $contents = (new CSSmin)->run(file_get_contents($file));
-        dd($contents);
-        return preg_replace('/(url\([\'"]?)/', '$1'.$base.dirname($file).'/', $contents);
+        return preg_replace('/(url\([\'"]?)/', '$1'.asset(dirname($public)).'/', $contents);
     }
 
     /**
@@ -28,7 +27,7 @@ class CSS extends ProviderBase implements ProviderInterface
             return $this->tags($file, $attributes);
         }
 
-        $attributes['href'] = $file;
+        $attributes['href'] = asset($file);
         $attributes['rel'] = 'stylesheet';
 
         return '<link '.$this->attributes($attributes).' />'.PHP_EOL;

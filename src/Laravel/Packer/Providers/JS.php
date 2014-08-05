@@ -7,10 +7,10 @@ class JS extends ProviderBase implements ProviderInterface
 {
     /**
      * @param string $file
-     * @param string $base
+     * @param string $public
      * @return string
      */
-    public function pack($file, $base = '')
+    public function pack($file, $public)
     {
         return JSMin::minify($file);
     }
@@ -26,7 +26,7 @@ class JS extends ProviderBase implements ProviderInterface
             return $this->tags($file, $attributes);
         }
 
-        $attributes['src'] = $file;
+        $attributes['src'] = asset($file);
 
         return '<script '.$this->attributes($attributes).'></script>'.PHP_EOL;
     }

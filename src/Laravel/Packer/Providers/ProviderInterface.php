@@ -5,14 +5,14 @@ interface ProviderInterface {
 
     /**
      * @param string $file
-     * @param string $file
+     * @param string $public
      * @return mixed
      */
-    public function pack($file, $base = '');
+    public function pack($file, $public);
 
     /**
-     * @param $file
-     * @param $attributes
+     * @param mixed $file
+     * @param array $attributes
      * @return mixed
      */
     public function tag($file, array $attributes);
