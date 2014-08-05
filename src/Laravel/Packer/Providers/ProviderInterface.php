@@ -4,9 +4,11 @@ namespace Laravel\Packer\Providers;
 interface ProviderInterface {
 
     /**
+     * @param string $file
+     * @param string $file
      * @return mixed
      */
-    public function packer();
+    public function pack($file, $base = '');
 
     /**
      * @param $file

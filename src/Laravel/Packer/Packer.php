@@ -5,23 +5,25 @@ use Laravel\Packer\Providers\JS;
 use Laravel\Packer\Providers\CSS;
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use InvalidArgumentException;
+use Exception;
 
 class Packer
 {
     /**
      * @var array
      */
-    protected $config;
+    protected $file = [];
 
     /**
      * @var array
      */
-    protected $attributes = array();
+    protected $dir = [];
 
     /**
-     * @var string
+     * @var array
      */
-    private $environment;
+    protected $config;
 
     /**
      * @var
@@ -29,130 +31,112 @@ class Packer
     private $provider;
 
     /**
-     * @var
-     */
-    private $buildPath;
-
-    /**
-     * @var bool
-     */
-    private $fullUrl = false;
-
-    /**
      * @param array $config
-     * @param string $environment
      */
-    public function __construct(array $config, $environment)
+    public function __construct(array $config)
     {
-        $this->checkConfiguration($config);
-
-        $this->config = $config;
-        $this->environment = $environment;
+        $this->config = $this->config($config);
     }
 
     /**
-     * @param $file
-     * @param array $attributes
-     * @return string
+     * @param mixed $file
+     * @param [string $name]
+     * @return this
      */
-    public function js($file, $attributes = array())
+    public function js($files, $name)
     {
-        $this->provider = new JS(public_path());
-        $this->buildPath = $this->config['js_build_path'];
-        $this->attributes = $attributes;
-
-        $this->process($file);
-
-        return $this;
+        $this->provider = new Js();
+        return $this->load('js', $files, $name);
     }
 
     /**
-     * @param $file
-     * @param array $attributes
-     * @return string
+     * @param mixed $file
+     * @param [string $name]
+     * @return this
      */
-    public function css($file, $attributes = array())
+    public function css($files, $name)
     {
-        $this->provider = new CSS(public_path());
-        $this->buildPath = $this->config['css_build_path'];
-        $this->attributes = $attributes;
-
-        $this->process($file);
-
-        return $this;
+        $this->provider = new CSS();
+        return $this->load('css', $files, $name);
     }
 
     /**
-     * @param $dir
-	 * @param array $attributes
+     * @param string $type
+     * @param mixed $file
+     * @param string $name
+     * @return this
+     */
+    public function load($type, $files, $name = '')
+    {
+        $this->dir['build'] = $this->config[$type.'_build_path'];
+        $this->dir['full'] = str_replace('//', '/', public_path($this->dir['build']));
+
+        $this->file['list'] = is_array($files) ? $files : [$files];
+        $this->file['name'] = $this->name($name, $type);
+        $this->file['full'] = str_replace('//', '/', $this->dir['full'].$this->file['name']);
+
+        return $this->process($files);
+    }
+
+    /**
+     * @param string $name
+     * @param string $ext
      * @return string
      */
-    public function stylesheetDir($dir, $attributes = array())
+    public function name($name, $ext)
     {
-		$this->provider = new StyleSheet(public_path());
-		$this->buildPath = $this->config['css_build_path'];
-		$this->attributes = $attributes;
-
-		return $this->assetDirHelper('css', $dir);
-    }
- 	
-    /**
-     * @param $dir
-	 * @param array $attributes
-     * @return string
-     */	
-    public function javascriptDir($dir, $attributes = array())
-    {
-		$this->provider = new JavaScript(public_path());
-		$this->buildPath = $this->config['js_build_path'];
-		$this->attributes = $attributes;
-
-		return $this->assetDirHelper('js', $dir);
+        return $name ?: md5(implode('', $this->files['list'])).'.'.$ext;
     }
 	
     /**
-     * @param $ext
-     * @param $dir
-     * @return string
-     */	
-    private function assetDirHelper($ext, $dir)
-    {
-		$files = array();
-
-		$itr_obj = new RecursiveDirectoryIterator(public_path().$dir);
-		$itr_obj->setFlags(RecursiveDirectoryIterator::SKIP_DOTS);
-		$dir_obj = new RecursiveIteratorIterator($itr_obj);
-
-		foreach ($dir_obj as $fileinfo) 
-		{
-			if (!$fileinfo->isDir() && ($filename = $fileinfo->getFilename()) && (pathinfo($filename, PATHINFO_EXTENSION) == $ext) && (strlen($fileinfo->getFilename()) < 30)) 
-			{
-				$files[] = str_replace(public_path(), '', $fileinfo);
-			}
-		}
-
-		if (count($files) > 0)
-		{
-			rsort($files);
-			$this->process($files);
-		}
-		
-		return $this;
-    }
-	
-    /**
-     * @param $file
+     * @param mixed $files
+     * @return this
      */
-    private function process($file)
+    private function process($files)
     {
-        $this->provider->add($file);
-
-        if($this->packerForCurrentEnvironment() && $this->provider->make($this->buildPath))
-        {
-            $this->provider->packer();
+        if ($this->local()) {
+            return $this;
         }
 
-        $this->fullUrl = false;
+        if (is_file($this->file['full'])) {
+            return $this;
+        }
+
+        $this->checkDir($this->dir['full']);
+
+        $public = public_path();
+        $base = asset('');
+
+        $fp = fopen($this->file['full'], 'w');
+
+        foreach ($this->file['list'] as $file) {
+            $file = $public.$file;
+
+            if (!is_file($file)) {
+                throw new Exception(sprintf('File "%s" not exists', $file));
+            }
+
+            fwrite($fp, $this->provider->pack($file, $base));
+        }
+
+        fclose($fp);
+
+        return $this;
+    }
+
+    /**
+     * @param string $dir
+     * @return null
+     */
+    private function checkDir($dir)
+    {
+        if (is_dir($dir)) {
+            return;
+        }
+
+        if (!mkdir($dir, 0755, true)) {
+            throw new Exception(sprintf('Folder %s couldn\'t be created', $dir));
+        }
     }
 
     /**
@@ -160,34 +144,26 @@ class Packer
      */
     public function render()
     {
-        $baseUrl = $this->fullUrl ? $this->getBaseUrl() : '';
-        if (!$this->packerForCurrentEnvironment())
-        {
-            return $this->provider->tags($this->attributes, $baseUrl);
+        $asset = asset('');
+
+        if ($this->local()) {
+            $list = array_map(function ($value) use ($asset) {
+                return $asset.$value;
+            }, $this->file['list']);
+        } else {
+            $list = $asset.$this->dir['build'].$this->file['name'];
         }
 
-        $filename = $baseUrl . $this->buildPath . $this->provider->getFilename();
-
-        return $this->provider->tag($filename, $this->attributes);
+        return $this->provider->tag($list);
     }
 
 	/**
 	 * @return bool
 	 */
-	protected function packerForCurrentEnvironment()
+	protected function local()
 	{
-		return !in_array($this->environment, $this->config['ignore_environments']);
+		return !in_array($this->config['environment'], $this->config['ignore_environments'], true);
 	}
-
-    /**
-     * @return string
-     */
-    public function withFullUrl()
-    {
-        $this->fullUrl = true;
-
-        return $this->render();
-    }
 
     /**
      * @return string
@@ -202,31 +178,20 @@ class Packer
      * @throws Exceptions\InvalidArgumentException
      * @return array
      */
-    private function checkConfiguration(array $config)
+    private function config(array $config)
     {
-        if(!isset($config['css_build_path']) || !is_string($config['css_build_path']))
-            throw new InvalidArgumentException("Missing css_build_path field");
-        if(!isset($config['js_build_path']) || !is_string($config['js_build_path']))
-            throw new InvalidArgumentException("Missing js_build_path field");
-        if(!isset($config['ignore_environments']) || !is_array($config['ignore_environments']))
-            throw new InvalidArgumentException("Missing ignore_environments field");
-    }
+        if (!isset($config['css_build_path']) || !is_string($config['css_build_path'])) {
+            throw new InvalidArgumentException(sprintf('Missing option %s', 'css_build_path'));
+        }
 
-    /**
-     * @return string
-     */
-    private function getBaseUrl()
-    {	
-		if (is_null($this->config['base_url']) || (trim($this->config['base_url']) == ''))
-		{
-			return sprintf("%s://%s",
-				isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http',
-				$_SERVER['HTTP_HOST']
-			);
-		}
-		else
-		{
-			return $this->config['base_url'];
-		}
+        if (!isset($config['js_build_path']) || !is_string($config['js_build_path'])) {
+            throw new InvalidArgumentException(sprintf('Missing option %s', 'js_build_path'));
+        }
+
+        if (!isset($config['ignore_environments']) || !is_array($config['ignore_environments'])) {
+            throw new InvalidArgumentException(sprintf('Missing option %s', 'ignore_environments'));
+        }
+
+        return $config;
     }
 }
