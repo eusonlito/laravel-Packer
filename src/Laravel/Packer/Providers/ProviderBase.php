@@ -1,7 +1,7 @@
 <?php
 namespace Laravel\Packer\Providers;
 
-abstract class BaseProvider
+abstract class ProviderBase
 {
     /**
      * @param  array  $files
