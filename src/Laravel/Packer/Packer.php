@@ -3,6 +3,7 @@ namespace Laravel\Packer;
 
 use Laravel\Packer\Providers\JS;
 use Laravel\Packer\Providers\CSS;
+use Laravel\Packer\Providers\IMG;
 
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
@@ -58,6 +59,10 @@ class Packer
             throw new InvalidArgumentException(sprintf('Missing option %s', 'ignore_environments'));
         }
 
+        if (!isset($config['base_folder'])) {
+            throw new InvalidArgumentException(sprintf('Missing option %s', 'base_folder'));
+        }
+
         if (!isset($config['check_timestamps'])) {
             throw new InvalidArgumentException(sprintf('Missing option %s', 'check_timestamps'));
         }
@@ -66,13 +71,15 @@ class Packer
     }
 
     /**
-     * @param  mixed  $file
+     * @param  mixed  $files
      * @param  string $name
      * @return this
      */
-    public function js($files, $name)
+    public function js($files, $name, array $attributes = [])
     {
-        $this->provider = new Js();
+        $this->provider = new Js([
+            'attributes' => $attributes
+        ]);
 
         return $this->load('js', $files, $name);
     }
@@ -91,13 +98,15 @@ class Packer
     }
 
     /**
-     * @param  mixed  $file
+     * @param  mixed  $files
      * @param  string $name
      * @return this
      */
-    public function css($files, $name)
+    public function css($files, $name, array $attributes = [])
     {
-        $this->provider = new CSS();
+        $this->provider = new CSS([
+            'attributes' => $attributes
+        ]);
 
         return $this->load('css', $files, $name);
     }
@@ -113,6 +122,45 @@ class Packer
         $this->provider = new CSS();
 
         return $this->load('css', $this->scanDir('css', $dir, $recursive), $name);
+    }
+
+    /**
+     * @param  string $file
+     * @param  string $name
+     * @param  string $transform
+     * @param  array  $attributes
+     * @throws Exceptions\InvalidArgumentException
+     * @return this
+     */
+    public function img($file, $name, $transform, array $attributes = [])
+    {
+        if (!is_string($file)) {
+            throw new InvalidArgumentException('img function only supports strings');
+        }
+
+        $valid = ['jpg', 'jpeg', 'png', 'gif'];
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+        if (!in_array($ext, $valid, true)) {
+            throw new InvalidArgumentException('Only jpg/jpeg/png/gif files are supported as valid images');
+        }
+
+        $md5 = md5($transform).'/';
+
+        if (preg_match('/\.('.implode('|', $valid).')$/i', $name)) {
+            $name = dirname($name).'/'.$md5.basename($name);
+        } elseif (substr($name, -1) === '/') {
+            $name .= $md5;
+        } else {
+            $name .= '/'.$md5;
+        }
+
+        $this->provider = new IMG([
+            'transform' => $transform,
+            'attributes' => $attributes
+        ]);
+
+        return $this->load($ext, $file, $name);
     }
 
     /**
@@ -166,6 +214,10 @@ class Packer
     {
         $this->files = is_array($files) ? $files : [$files];
 
+        if (strpos($name, '/') !== 0) {
+            $name = $this->path('', $this->config['base_folder'].'/'.$name);
+        }
+
         if (preg_match('/\.'.$type.'$/i', $name)) {
             $this->storage = dirname($name).'/';
             $this->name = basename($name);
@@ -176,7 +228,9 @@ class Packer
 
         if (!$this->isLocal() && ($this->config['check_timestamps'] === true)) {
             $this->newer = max(array_map(function ($file) {
-                return filemtime($this->path('public', $file));
+                if (is_file($file = $this->path('public', $file))) {
+                    return filemtime($file);
+                }
             }, $this->files));
 
             $this->name = $this->newer.'-'.$this->name;
@@ -198,7 +252,7 @@ class Packer
             $this->setPath($name);
         }
 
-        $path = str_replace('//', '/', $this->paths[$name].$location);
+        $path = str_replace('//', '/', $this->paths[$name].'/'.$location);
 
         if ($name === 'asset') {
             $path = str_replace(':/', '://', $path);
@@ -246,11 +300,9 @@ class Packer
         foreach ($this->files as $file) {
             $real = $this->path('public', $file);
 
-            if (!is_file($real)) {
-                throw new Exception(sprintf('File "%s" not exists', $real));
+            if (is_file($real)) {
+                fwrite($fp, $this->provider->pack($real, $file));
             }
-
-            fwrite($fp, $this->provider->pack($real, $file));
         }
 
         fclose($fp);

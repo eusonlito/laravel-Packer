@@ -19,15 +19,15 @@ class CSS extends ProviderBase implements ProviderInterface
 
     /**
      * @param  mixed  $file
-     * @param  array  $attributes
      * @return string
      */
-    public function tag($file, array $attributes = [])
+    public function tag($file)
     {
         if (is_array($file)) {
-            return $this->tags($file, $attributes);
+            return $this->tags($file);
         }
 
+        $attributes = $this->settings['attributes'];
         $attributes['href'] = asset($file);
         $attributes['rel'] = 'stylesheet';
 

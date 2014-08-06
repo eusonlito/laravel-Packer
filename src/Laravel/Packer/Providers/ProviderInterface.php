@@ -4,6 +4,12 @@ namespace Laravel\Packer\Providers;
 interface ProviderInterface
 {
     /**
+     * @param  array  $settings
+     * @return string
+     */
+    public function __construct(array $settings);
+
+    /**
      * @param  string $file
      * @param  string $base
      * @return mixed
@@ -12,8 +18,7 @@ interface ProviderInterface
 
     /**
      * @param  string $file
-     * @param  array  $attributes
      * @return mixed
      */
-    public function tag($file, array $attributes);
+    public function tag($file);
 }
