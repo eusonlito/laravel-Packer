@@ -138,11 +138,14 @@ All transform options availables at https://github.com/oscarotero/imageCow
         // Set width size to 500px
         <img src="{{ Packer::img('/images/picture.jpg', '/storage/cache/images/', 'resize,500') }}" />
 
-        // Crop file to 200px square
+        // Crop image to 200px square
         <img src="{{ Packer::img('/images/picture.jpg', '/storage/cache/images/', 'resizeCrop,200,200') }}" />
 
-        // Crop file to 200px square using base_folder parameter
+        // Crop image to 200px square center middle using base_folder parameter
         <img src="{{ Packer::img('/images/picture.jpg', 'images/', 'resizeCrop,200,200') }}" />
+
+        // Crop image to 200px square center top using base_folder parameter
+        <img src="{{ Packer::img('/images/picture.jpg', 'images/', 'resizeCrop,200,200,center,top') }}" />
     </body>
 </html>
 
