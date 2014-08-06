@@ -47,7 +47,10 @@ You can use this Facade anywhere in your application
 
         // Packing multiple files
         {{ Packer::css(['/css/main.css', '/css/bootstrap.css'], '/storage/cache/css/styles.css') }}
-        
+
+        // Packing multiple files with autonaming based
+        {{ Packer::css(['/css/main.css', '/css/bootstrap.css'], '/storage/cache/css/') }}
+
         // pack and combine all css files in given folder
         {{ Packer::cssDir('/css/', '/storage/cache/css/all.css') }}
 
@@ -56,6 +59,9 @@ You can use this Facade anywhere in your application
 
         // Packing multiple folders with recursive search
         {{ Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/all.css', true) }}
+
+        // Packing multiple folders with recursive search and autonaming
+        {{ Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/', true) }}
     </head>
 </html>
 
@@ -75,7 +81,10 @@ CSS `url()` values will be converted to absolute path to avoid file references p
 
         // Packing multiple files
         {{ Packer::js(['/js/main.js', '/js/bootstrap.js'], '/storage/cache/js/scripts.js') }}
-        
+
+        // Packing multiple files with autonaming based
+        {{ Packer::js(['/js/main.js', '/js/bootstrap.js'], '/storage/cache/js/') }}
+
         // pack and combine all js files in given folder
         {{ Packer::jsDir('/js/', '/storage/cache/js/all.js') }}
 
@@ -84,6 +93,9 @@ CSS `url()` values will be converted to absolute path to avoid file references p
 
         // Packing multiple folders with recursive search
         {{ Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/all.js', true) }}
+
+        // Packing multiple folders with recursive search and autonaming
+        {{ Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/', true) }}
     </body>
 </html>
 
