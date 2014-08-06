@@ -12,6 +12,10 @@ class JS extends ProviderBase implements ProviderInterface
      */
     public function pack($file, $public)
     {
+        if (!is_file($file)) {
+            return sprintf('/* File %s not exists */', $file);
+        }
+
         return JSMin::minify(file_get_contents($file));
     }
 

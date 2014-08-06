@@ -5,12 +5,13 @@ use Laravel\Packer\Providers\JS;
 use Laravel\Packer\Providers\CSS;
 use Laravel\Packer\Providers\IMG;
 
+use App;
+
 use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
 use RegexIterator;
 
-use InvalidArgumentException;
-use Exception;
+use Exceptions;
 
 class Packer
 {
@@ -58,21 +59,36 @@ class Packer
     private $provider;
 
     /**
-     * @param  array                               $config
-     * @throws Exceptions\InvalidArgumentException
+     * @param  array                      $config
+     * @throws Exceptions\InvalidArgument
      */
     public function __construct(array $config)
     {
+        $this->setConfig($config);
+    }
+
+    /**
+     * @param  array                      $config
+     * @throws Exceptions\InvalidArgument
+     */
+    public function setConfig(array $config)
+    {
+        $config = array_merge($this->config, $config);
+
         if (!isset($config['ignore_environments']) || !is_array($config['ignore_environments'])) {
-            throw new InvalidArgumentException(sprintf('Missing option %s', 'ignore_environments'));
+            throw new InvalidArgument(sprintf('Missing option %s', 'ignore_environments'));
         }
 
         if (!isset($config['base_folder'])) {
-            throw new InvalidArgumentException(sprintf('Missing option %s', 'base_folder'));
+            throw new InvalidArgument(sprintf('Missing option %s', 'base_folder'));
         }
 
         if (!isset($config['check_timestamps'])) {
-            throw new InvalidArgumentException(sprintf('Missing option %s', 'check_timestamps'));
+            throw new InvalidArgument(sprintf('Missing option %s', 'check_timestamps'));
+        }
+
+        if (empty($config['environment'])) {
+            $config['environment'] = App::environment();
         }
 
         $this->config = $config;
@@ -81,6 +97,7 @@ class Packer
     /**
      * @param  mixed  $files
      * @param  string $name
+     * @param  array  $attributes
      * @return this
      */
     public function js($files, $name, array $attributes = [])
@@ -96,11 +113,14 @@ class Packer
      * @param  mixed   $dir
      * @param  string  $name
      * @param  boolean $recursive
+     * @param  array   $attributes
      * @return this
      */
-    public function jsDir($dir, $name, $recursive = false)
+    public function jsDir($dir, $name, $recursive = false, array $attributes = [])
     {
-        $this->provider = new JS();
+        $this->provider = new JS([
+            'attributes' => $attributes
+        ]);
 
         return $this->load('js', $this->scanDir('js', $dir, $recursive), $name);
     }
@@ -108,6 +128,7 @@ class Packer
     /**
      * @param  mixed  $files
      * @param  string $name
+     * @param  array  $attributes
      * @return this
      */
     public function css($files, $name, array $attributes = [])
@@ -123,34 +144,37 @@ class Packer
      * @param  mixed   $dir
      * @param  string  $name
      * @param  boolean $recursive
+     * @param  array   $attributes
      * @return this
      */
-    public function cssDir($dir, $name, $recursive = false)
+    public function cssDir($dir, $name, $recursive = false, array $attributes = [])
     {
-        $this->provider = new CSS();
+        $this->provider = new CSS([
+            'attributes' => $attributes
+        ]);
 
         return $this->load('css', $this->scanDir('css', $dir, $recursive), $name);
     }
 
     /**
-     * @param  string                              $file
-     * @param  string                              $name
-     * @param  string                              $transform
-     * @param  array                               $attributes
-     * @throws Exceptions\InvalidArgumentException
+     * @param  string                     $file
+     * @param  string                     $name
+     * @param  string                     $transform
+     * @param  array                      $attributes
+     * @throws Exceptions\InvalidArgument
      * @return this
      */
     public function img($file, $name, $transform, array $attributes = [])
     {
         if (!is_string($file)) {
-            throw new InvalidArgumentException('img function only supports strings');
+            throw new InvalidArgument('img function only supports strings');
         }
 
         $valid = ['jpg', 'jpeg', 'png', 'gif'];
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if (!in_array($ext, $valid, true)) {
-            throw new InvalidArgumentException('Only jpg/jpeg/png/gif files are supported as valid images');
+            throw new InvalidArgument('Only jpg/jpeg/png/gif files are supported as valid images');
         }
 
         $md5 = md5($transform).'/';
@@ -177,10 +201,10 @@ class Packer
     }
 
     /**
-     * @param  string                              $ext
-     * @param  string                              $dir
-     * @param  boolean                             $recursive
-     * @throws Exceptions\InvalidArgumentException
+     * @param  string                 $ext
+     * @param  string                 $dir
+     * @param  boolean                $recursive
+     * @throws Exceptions\DirNotExist
      * @return array
      */
     private function scanDir($ext, $dir, $recursive = false)
@@ -198,7 +222,7 @@ class Packer
         $dir = $this->path('public', $dir);
 
         if (!is_dir($dir)) {
-            throw new InvalidArgumentException(sprintf('Folder %s not exists', $dir));
+            throw new DirNotExist(sprintf('Folder %s not exists', $dir));
         }
 
         if ($recursive) {
@@ -251,7 +275,7 @@ class Packer
 
         $this->file = $this->path('public', $this->storage.$this->name);
 
-        return $this->process($files);
+        return $this->process();
     }
 
     /**
@@ -275,8 +299,8 @@ class Packer
     }
 
     /**
-     * @param  string                              $name
-     * @throws Exceptions\InvalidArgumentException
+     * @param  string                     $name
+     * @throws Exceptions\InvalidArgument
      * @return string
      */
     private function setPath($name)
@@ -292,15 +316,14 @@ class Packer
                 return $this->paths[$name] = asset('');
         }
 
-        throw new InvalidArgumentException(sprintf('This path does not exists %s', $name));
+        throw new InvalidArgument(sprintf('This path does not exists %s', $name));
     }
 
     /**
-     * @param  mixed                $files
-     * @throws Exceptions\Exception
+     * @throws Exceptions\FileNotWritable
      * @return this
      */
-    private function process($files)
+    private function process()
     {
         if ($this->useCache()) {
             return $this;
@@ -308,14 +331,12 @@ class Packer
 
         $this->checkDir(dirname($this->file));
 
-        $fp = fopen($this->file, 'c');
+        if (!($fp = @fopen($this->file, 'c'))) {
+            throw new FileNotWritable(sprintf('File %s can not be created', $name));
+        }
 
         foreach ($this->files as $file) {
-            $real = $this->path('public', $file);
-
-            if (is_file($real)) {
-                fwrite($fp, $this->provider->pack($real, $file));
-            }
+            fwrite($fp, $this->provider->pack($this->path('public', $file), $file));
         }
 
         fclose($fp);
@@ -340,7 +361,8 @@ class Packer
     }
 
     /**
-     * @param  string  $dir
+     * @param  string                    $dir
+     * @throws Exceptions\DirNotWritable
      * @return boolean
      */
     private function checkDir($dir)
@@ -349,7 +371,9 @@ class Packer
             return true;
         }
 
-        return mkdir($dir, 0755, true);
+        if (!@mkdir($dir, 0755, true)) {
+            throw new DirNotWritable(sprintf('Folder %s can not be created', $dir));
+        }
     }
 
     /**
@@ -374,6 +398,22 @@ class Packer
     protected function isLocal()
     {
         return ($this->force['current'] === false) && in_array($this->config['environment'], $this->config['ignore_environments'], true);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getFilePublic()
+    {
+        return $this->storage.$this->name;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getFilePath()
+    {
+        return $this->file;
     }
 
     /**

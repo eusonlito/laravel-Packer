@@ -13,12 +13,18 @@
         "php": ">=5.4",
         "imagecow/imagecow": "*"
     },
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
     "autoload": {
         "psr-4": {
             "Laravel\\Packer\\": "src/Laravel/Packer/"
         },
         "classmap": [
             "src/Laravel/Packer/Processors/"
+        ],
+        "files": [
+                "src/Laravel/Packer/Exceptions.php"
         ]
     },
     "minimum-stability": "stable"

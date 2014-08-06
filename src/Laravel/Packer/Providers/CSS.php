@@ -12,6 +12,10 @@ class CSS extends ProviderBase implements ProviderInterface
      */
     public function pack($file, $public)
     {
+        if (!is_file($file)) {
+            return sprintf('/* File %s not exists */', $file);
+        }
+
         $contents = (new CSSmin())->run(file_get_contents($file));
 
         return preg_replace('/(url\([\'"]?)/', '$1'.asset(dirname($public)).'/', $contents);

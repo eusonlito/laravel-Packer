@@ -12,6 +12,10 @@ class IMG extends ProviderBase implements ProviderInterface
      */
     public function pack($file, $public)
     {
+        if (!is_file($file)) {
+            return;
+        }
+
         return Image::create($file)->transform($this->settings['transform'])->getString();
     }
 
