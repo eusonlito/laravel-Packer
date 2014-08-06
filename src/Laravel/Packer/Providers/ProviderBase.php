@@ -20,15 +20,14 @@ abstract class ProviderBase
 
     /**
      * @param  array  $files
-     * @param  array  $attributes
      * @return string
      */
-    public function tags($files, array $attributes = [])
+    public function tags($files)
     {
         $html = '';
 
         foreach ($files as $file) {
-            $html .= $this->tag($file, $attributes);
+           $html .= $this->tag($file);
         }
 
         return $html;

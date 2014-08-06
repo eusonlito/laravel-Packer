@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.4",
-        "imagecow/imagecow": "1.*"
+        "imagecow/imagecow": "*"
     },
     "autoload": {
         "psr-4": {

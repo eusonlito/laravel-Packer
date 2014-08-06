@@ -16,16 +16,18 @@ class IMG extends ProviderBase implements ProviderInterface
     }
 
     /**
-     * @param  string  $file
+     * @param  string $file
      * @return string
      */
-    public function tag($file, array $attributes = [])
+    public function tag($file)
     {
-        if (empty($this->settings['attributes'])) {
+        $attributes = $this->settings['attributes'];
+        $file = is_array($file) ? $file[0] : $file;
+
+        if (empty($attributes)) {
             return asset($file);
         }
 
-        $attributes = $this->settings['attributes'];
         $attributes['src'] = asset($file);
 
         return '<img '.$this->attributes($attributes).'/>'.PHP_EOL;

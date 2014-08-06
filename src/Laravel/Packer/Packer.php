@@ -42,6 +42,14 @@ class Packer
     /**
      * @var array
      */
+    private $force = [
+        'current' => false,
+        'previous' => false
+    ];
+
+    /**
+     * @var array
+     */
     private $config = [];
 
     /**
@@ -125,10 +133,10 @@ class Packer
     }
 
     /**
-     * @param  string $file
-     * @param  string $name
-     * @param  string $transform
-     * @param  array  $attributes
+     * @param  string                              $file
+     * @param  string                              $name
+     * @param  string                              $transform
+     * @param  array                               $attributes
      * @throws Exceptions\InvalidArgumentException
      * @return this
      */
@@ -155,12 +163,17 @@ class Packer
             $name .= '/'.$md5;
         }
 
+        $this->force['previous'] = $this->force['current'];
+        $this->force['current'] = true;
+
         $this->provider = new IMG([
             'transform' => $transform,
             'attributes' => $attributes
         ]);
 
-        return $this->load($ext, $file, $name);
+        $src = $this->load($ext, $file, $name);
+
+        return $src;
     }
 
     /**
@@ -350,6 +363,8 @@ class Packer
             $list = $this->storage.$this->name;
         }
 
+        $this->force['current'] = $this->force['previous'];
+
         return $this->provider->tag($list);
     }
 
@@ -358,7 +373,7 @@ class Packer
      */
     protected function isLocal()
     {
-        return in_array($this->config['environment'], $this->config['ignore_environments'], true);
+        return ($this->force['current'] === false) && in_array($this->config['environment'], $this->config['ignore_environments'], true);
     }
 
     /**
