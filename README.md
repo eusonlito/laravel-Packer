@@ -43,24 +43,18 @@ You can use this Facade anywhere in your application
 <html>
     <head>
         // Pack a simple file
-        {{ Packer::css('/css/main.css') }}
+        {{ Packer::css('/css/main.css', '/storage/cache/css/main.css') }}
 
         // Packing multiple files
-        {{ Packer::css(['/css/main.css', '/css/bootstrap.css']) }}
-
-        // add package name
         {{ Packer::css(['/css/main.css', '/css/bootstrap.css'], '/storage/cache/css/styles.css') }}
         
         // pack and combine all css files in given folder
-        {{ Packer::cssDir('/css/') }}
+        {{ Packer::cssDir('/css/', '/storage/cache/css/all.css') }}
 
         // Packing multiple folders
-        {{ Packer::cssDir(['/css/', '/theme/']) }}
-
-        // Packing multiple folders adding a name
         {{ Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/all.css') }}
 
-        // Packing multiple folders with recursive option and adding a name 
+        // Packing multiple folders with recursive search
         {{ Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/all.css', true) }}
     </head>
 </html>
@@ -77,24 +71,18 @@ CSS `url()` values will be converted to absolute path to avoid file references p
     <body>
     ...
         // Pack a simple file
-        {{ Packer::js('/js/main.js') }}
+        {{ Packer::js('/js/main.js', '/storage/cache/js/scripts.js') }}
 
         // Packing multiple files
-        {{ Packer::js(['/js/main.js', '/js/bootstrap.js']) }}
-
-        // add package name
         {{ Packer::js(['/js/main.js', '/js/bootstrap.js'], '/storage/cache/js/scripts.js') }}
         
         // pack and combine all js files in given folder
-        {{ Packer::jsDir('/js/') }}
+        {{ Packer::jsDir('/js/', '/storage/cache/js/all.js') }}
 
         // Packing multiple folders
-        {{ Packer::jsDir(['/js/', '/theme/']) }}
-
-        // Packing multiple folders adding a name
         {{ Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/all.js') }}
 
-        // Packing multiple folders with recursive option and adding a name 
+        // Packing multiple folders with recursive search
         {{ Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/all.js', true) }}
     </body>
 </html>
