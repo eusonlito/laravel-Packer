@@ -124,6 +124,7 @@ CSS `url()` values will be converted to absolute path to avoid file references p
         {{ Packer::jsDir(['/js/', '/theme/'], 'js/', true) }}
     </body>
 </html>
+```
 
 #### Images
 All transform options availables at https://github.com/oscarotero/imageCow
