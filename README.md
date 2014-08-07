@@ -1,6 +1,11 @@
 # Laravel Packer
 
-Adapted version from: https://github.com/ceesvanegmond/minify
+[![Build Status](https://travis-ci.org/eusonlito/laravel-Packer.svg?branch=master)](https://travis-ci.org/eusonlito/laravel-Packer)
+[![Latest Stable Version](https://poser.pugx.org/ceesvanegmond/minify/v/stable.png)](https://packagist.org/packages/ceesvanegmond/minify)
+[![Total Downloads](https://poser.pugx.org/ceesvanegmond/minify/downloads.png)](https://packagist.org/packages/ceesvanegmond/minify)
+[![License](https://poser.pugx.org/ceesvanegmond/minify/license.png)](https://packagist.org/packages/ceesvanegmond/minify)
+
+Inspired by: https://github.com/ceesvanegmond/minify
 
 With this package you can pack and minify your existing css and javascript files. This process can be a little tough, this package simplies this process and automates it.
 
