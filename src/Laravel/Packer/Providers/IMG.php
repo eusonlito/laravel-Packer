@@ -29,11 +29,11 @@ class IMG extends ProviderBase implements ProviderInterface
         $file = is_array($file) ? $file[0] : $file;
 
         if (empty($attributes)) {
-            return asset($file);
+            return $this->path($this->settings['asset'].$file);
         }
 
-        $attributes['src'] = asset($file);
+        $attributes['src'] = $this->path($this->settings['asset'].$file);
 
-        return '<img '.$this->attributes($attributes).'/>'.PHP_EOL;
+        return '<img '.$this->attributes($attributes).' />'.PHP_EOL;
     }
 }
