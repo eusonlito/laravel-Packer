@@ -212,6 +212,7 @@ class Packer
         $this->force['current'] = true;
 
         $this->provider = new IMG([
+            'asset' => $this->config['asset'],
             'transform' => $transform,
             'attributes' => $attributes
         ]);
