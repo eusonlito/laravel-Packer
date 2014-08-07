@@ -18,7 +18,7 @@ class CSS extends ProviderBase implements ProviderInterface
 
         $contents = (new CSSmin())->run(file_get_contents($file));
 
-        return preg_replace('/(url\([\'"]?)/', '$1'.asset(dirname($public)).'/', $contents);
+        return preg_replace('/(url\([\'"]?)/', '$1'.$this->settings['asset'].dirname($public).'/', $contents);
     }
 
     /**
@@ -32,7 +32,7 @@ class CSS extends ProviderBase implements ProviderInterface
         }
 
         $attributes = $this->settings['attributes'];
-        $attributes['href'] = asset($file);
+        $attributes['href'] = $this->settings['asset'].$file;
         $attributes['rel'] = 'stylesheet';
 
         return '<link '.$this->attributes($attributes).' />'.PHP_EOL;

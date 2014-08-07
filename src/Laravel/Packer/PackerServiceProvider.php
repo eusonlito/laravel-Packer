@@ -54,6 +54,15 @@ class PackerServiceProvider extends ServiceProvider
      */
     public function config()
     {
-        return Config::get('packer::config');
+        $config = Config::get('packer::config');
+
+        if (empty($config['environment'])) {
+            $config['environment'] = App::environment();
+        }
+
+        $config['public_path'] = public_path();
+        $config['asset'] = asset('');
+
+        return $config;
     }
 }

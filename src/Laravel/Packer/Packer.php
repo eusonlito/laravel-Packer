@@ -7,8 +7,10 @@ use Laravel\Packer\Providers\IMG;
 
 use App;
 
-use RecursiveIteratorIterator;
 use RecursiveDirectoryIterator;
+use RecursiveIteratorIterator;
+use DirectoryIterator;
+use IteratorIterator;
 use RegexIterator;
 
 use Exceptions;
@@ -61,15 +63,18 @@ class Packer
     /**
      * @param  array                      $config
      * @throws Exceptions\InvalidArgument
+     * @return this
      */
     public function __construct(array $config)
     {
-        $this->setConfig($config);
+        return $this->setConfig($config);
     }
 
     /**
      * @param  array                      $config
      * @throws Exceptions\InvalidArgument
+     * @throws Exceptions\DirNotExist
+     * @return this
      */
     public function setConfig(array $config)
     {
@@ -87,11 +92,25 @@ class Packer
             throw new InvalidArgument(sprintf('Missing option %s', 'check_timestamps'));
         }
 
-        if (empty($config['environment'])) {
-            $config['environment'] = App::environment();
+        if (!isset($config['environment'])) {
+            throw new InvalidArgument(sprintf('Missing option %s', 'environment'));
+        }
+
+        if (!isset($config['asset'])) {
+            throw new InvalidArgument(sprintf('Missing option %s', 'asset'));
+        }
+
+        if (!isset($config['public_path'])) {
+            throw new InvalidArgument(sprintf('Missing option %s', 'public_path'));
+        }
+
+        if (!is_dir($config['public_path'])) {
+            throw new DirNotExist(sprintf('Folder %s not exists', $config['public_path']));
         }
 
         $this->config = $config;
+
+        return $this;
     }
 
     /**
@@ -103,6 +122,7 @@ class Packer
     public function js($files, $name, array $attributes = [])
     {
         $this->provider = new Js([
+            'asset' => $this->config['asset'],
             'attributes' => $attributes
         ]);
 
@@ -119,6 +139,7 @@ class Packer
     public function jsDir($dir, $name, $recursive = false, array $attributes = [])
     {
         $this->provider = new JS([
+            'asset' => $this->config['asset'],
             'attributes' => $attributes
         ]);
 
@@ -134,6 +155,7 @@ class Packer
     public function css($files, $name, array $attributes = [])
     {
         $this->provider = new CSS([
+            'asset' => $this->config['asset'],
             'attributes' => $attributes
         ]);
 
@@ -150,6 +172,7 @@ class Packer
     public function cssDir($dir, $name, $recursive = false, array $attributes = [])
     {
         $this->provider = new CSS([
+            'asset' => $this->config['asset'],
             'attributes' => $attributes
         ]);
 
@@ -229,13 +252,14 @@ class Packer
             $Iterator = new RecursiveDirectoryIterator($dir);
             $Iterator = new RegexIterator(new RecursiveIteratorIterator($Iterator), '/\.'.$ext.'$/i', RegexIterator::MATCH);
         } else {
-            $Iterator = glob($dir.'*\.'.$ext);
+            $Iterator = new DirectoryIterator($dir);
+            $Iterator = new RegexIterator(new IteratorIterator($Iterator), '/\.'.$ext.'$/i', RegexIterator::MATCH);
         }
 
         $public = $this->path('public');
 
         foreach ($Iterator as $file) {
-            $files[] = str_replace($public, '', $file);
+            $files[] = str_replace($public, '', $file->getPathname());
         }
 
         return $files;
@@ -263,7 +287,7 @@ class Packer
             $this->name = md5(implode('', $this->files)).'.'.$type;
         }
 
-        if (!$this->isLocal() && ($this->config['check_timestamps'] === true)) {
+        if ($this->files && !$this->isLocal() && ($this->config['check_timestamps'] === true)) {
             $this->newer = max(array_map(function ($file) {
                 if (is_file($file = $this->path('public', $file))) {
                     return filemtime($file);
@@ -281,42 +305,20 @@ class Packer
     /**
      * @param  string $name
      * @param  string $location
+     * @throws Exceptions\InvalidArgument
      * @return string
      */
     private function path($name, $location = '')
     {
-        if (!array_key_exists($name, $this->paths)) {
-            $this->setPath($name);
+        if ($name === '') {
+            $path = '';
+        } elseif ($name === 'public') {
+            $path = $this->config['public_path'];
+        } else {
+            throw new InvalidArgument(sprintf('This path does not exists %s', $name));
         }
 
-        $path = str_replace('//', '/', $this->paths[$name].'/'.$location);
-
-        if ($name === 'asset') {
-            $path = str_replace(':/', '://', $path);
-        }
-
-        return $path;
-    }
-
-    /**
-     * @param  string                     $name
-     * @throws Exceptions\InvalidArgument
-     * @return string
-     */
-    private function setPath($name)
-    {
-        switch ($name) {
-            case '':
-                return $this->paths[$name] = '';
-
-            case 'public':
-                return $this->paths[$name] = public_path();
-
-            case 'asset':
-                return $this->paths[$name] = asset('');
-        }
-
-        throw new InvalidArgument(sprintf('This path does not exists %s', $name));
+        return preg_replace('#/+#', '/', $path.'/'.$location);
     }
 
     /**
