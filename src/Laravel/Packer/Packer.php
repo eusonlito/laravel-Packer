@@ -5,8 +5,6 @@ use Laravel\Packer\Providers\JS;
 use Laravel\Packer\Providers\CSS;
 use Laravel\Packer\Providers\IMG;
 
-use App;
-
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use DirectoryIterator;
@@ -303,8 +301,8 @@ class Packer
     }
 
     /**
-     * @param  string $name
-     * @param  string $location
+     * @param  string                     $name
+     * @param  string                     $location
      * @throws Exceptions\InvalidArgument
      * @return string
      */
@@ -318,7 +316,7 @@ class Packer
             throw new InvalidArgument(sprintf('This path does not exists %s', $name));
         }
 
-        return preg_replace('#/+#', '/', $path.'/'.$location);
+        return preg_replace('#(^|[^:])//+#', '$1/', $path.'/'.$location);
     }
 
     /**
