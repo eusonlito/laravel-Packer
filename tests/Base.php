@@ -21,13 +21,18 @@ abstract class Base extends PHPUnit_Framework_TestCase
         $fs = fs::setup('public');
 
         $resources = fs::newDirectory('resources')->at($fs);
+
         $js = fs::newDirectory('js')->at($resources);
         $css = fs::newDirectory('css')->at($resources);
+        $img = fs::newDirectory('img')->at($resources);
 
         foreach (glob(__DIR__.'/resources/*') as $file) {
+            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+            $ext = in_array($ext, ['css', 'js'], true) ? $ext : 'img';
+
             $new = fs::newFile(basename($file))
                 ->setContent(file_get_contents($file))
-                ->at(${strtolower(pathinfo($file, PATHINFO_EXTENSION))});
+                ->at($$ext);
         }
 
         $config['public_path'] = $fs->url();

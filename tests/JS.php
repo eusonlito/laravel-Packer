@@ -11,9 +11,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $file = $this->cache.'/js/scripts-1.js';
 
@@ -28,9 +26,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $file = $this->cache.'/js/scripts-1.js';
 
@@ -49,9 +45,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $this->Packer->setConfig(['check_timestamps' => true]);
     }
@@ -68,9 +62,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $this->Packer->setConfig(['check_timestamps' => true]);
     }
@@ -83,9 +75,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
     }
 
     public function testPackOneAutonameAbsolute()
@@ -96,9 +86,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
     }
 
     /** TESTS WITH MULTIPLE FILES **/
@@ -114,9 +102,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $file = $this->cache.'/js/scripts.js';
 
@@ -134,9 +120,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $file = $this->cache.'/js/scripts.js';
 
@@ -158,9 +142,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $this->Packer->setConfig(['check_timestamps' => true]);
     }
@@ -180,9 +162,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $this->Packer->setConfig(['check_timestamps' => true]);
     }
@@ -198,9 +178,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
     }
 
     public function testPackMultipleAutonameAbsolute()
@@ -214,9 +192,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
     }
 
     public function testPackMultipleLocal()
@@ -234,9 +210,7 @@ class JSTest extends Base
 
         $this->assertTrue(substr_count($packed->render(), '</script>') === 2, 'Local environment get 2 tags to original files');
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $this->Packer->setConfig(['environment' => 'testing']);
     }
@@ -251,9 +225,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $file = $this->cache.'/js/all.js';
 
@@ -268,9 +240,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $file = $this->cache.'/js/all.js';
 
@@ -289,9 +259,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $this->Packer->setConfig(['check_timestamps' => true]);
     }
@@ -308,9 +276,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
 
         $this->Packer->setConfig(['check_timestamps' => true]);
     }
@@ -323,9 +289,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
     }
 
     public function testPackDirectoryAutonameAbsolute()
@@ -336,9 +300,7 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
     }
 
     public function testPackDirectoryAutonameAbsoluteRecursive()
@@ -349,8 +311,6 @@ class JSTest extends Base
 
         $this->checkContents($file, ['_TEST_INI_FILE1', '_TEST_END_FILE1', '_TEST_INI_FILE2', '_TEST_END_FILE2']);
 
-        if (is_file($file)) {
-            unlink($file);
-        }
+        unlink($file);
     }
 }

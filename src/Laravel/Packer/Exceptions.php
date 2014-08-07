@@ -1,5 +1,5 @@
 <?php
-namespace Laravel\Packer;
+namespace Laravel\Packer\Exceptions;
 
 use Exception;
 

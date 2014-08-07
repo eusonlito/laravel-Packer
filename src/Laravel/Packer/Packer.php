@@ -4,14 +4,13 @@ namespace Laravel\Packer;
 use Laravel\Packer\Providers\JS;
 use Laravel\Packer\Providers\CSS;
 use Laravel\Packer\Providers\IMG;
+use Laravel\Packer\Exceptions;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use DirectoryIterator;
 use IteratorIterator;
 use RegexIterator;
-
-use Exceptions;
 
 class Packer
 {
@@ -79,31 +78,31 @@ class Packer
         $config = array_merge($this->config, $config);
 
         if (!isset($config['ignore_environments']) || !is_array($config['ignore_environments'])) {
-            throw new InvalidArgument(sprintf('Missing option %s', 'ignore_environments'));
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'ignore_environments'));
         }
 
         if (!isset($config['base_folder'])) {
-            throw new InvalidArgument(sprintf('Missing option %s', 'base_folder'));
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'base_folder'));
         }
 
         if (!isset($config['check_timestamps'])) {
-            throw new InvalidArgument(sprintf('Missing option %s', 'check_timestamps'));
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'check_timestamps'));
         }
 
         if (!isset($config['environment'])) {
-            throw new InvalidArgument(sprintf('Missing option %s', 'environment'));
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'environment'));
         }
 
         if (!isset($config['asset'])) {
-            throw new InvalidArgument(sprintf('Missing option %s', 'asset'));
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'asset'));
         }
 
         if (!isset($config['public_path'])) {
-            throw new InvalidArgument(sprintf('Missing option %s', 'public_path'));
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'public_path'));
         }
 
         if (!is_dir($config['public_path'])) {
-            throw new DirNotExist(sprintf('Folder %s not exists', $config['public_path']));
+            throw new Exceptions\DirNotExist(sprintf('Folder %s not exists', $config['public_path']));
         }
 
         $this->config = $config;
@@ -188,14 +187,14 @@ class Packer
     public function img($file, $name, $transform, array $attributes = [])
     {
         if (!is_string($file)) {
-            throw new InvalidArgument('img function only supports strings');
+            throw new Exceptions\InvalidArgument('img function only supports strings');
         }
 
         $valid = ['jpg', 'jpeg', 'png', 'gif'];
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
         if (!in_array($ext, $valid, true)) {
-            throw new InvalidArgument('Only jpg/jpeg/png/gif files are supported as valid images');
+            throw new Exceptions\InvalidArgument('Only jpg/jpeg/png/gif files are supported as valid images');
         }
 
         $md5 = md5($transform).'/';
@@ -244,7 +243,7 @@ class Packer
         $dir = $this->path('public', $dir);
 
         if (!is_dir($dir)) {
-            throw new DirNotExist(sprintf('Folder %s not exists', $dir));
+            throw new Exceptions\DirNotExist(sprintf('Folder %s not exists', $dir));
         }
 
         if ($recursive) {
@@ -307,14 +306,14 @@ class Packer
      * @throws Exceptions\InvalidArgument
      * @return string
      */
-    private function path($name, $location = '')
+    public function path($name, $location = '')
     {
         if ($name === '') {
             $path = '';
         } elseif ($name === 'public') {
             $path = $this->config['public_path'];
         } else {
-            throw new InvalidArgument(sprintf('This path does not exists %s', $name));
+            throw new Exceptions\InvalidArgument(sprintf('This path does not exists %s', $name));
         }
 
         return preg_replace('#(^|[^:])//+#', '$1/', $path.'/'.$location);
@@ -333,7 +332,7 @@ class Packer
         $this->checkDir(dirname($this->file));
 
         if (!($fp = @fopen($this->file, 'c'))) {
-            throw new FileNotWritable(sprintf('File %s can not be created', $name));
+            throw new Exceptions\FileNotWritable(sprintf('File %s can not be created', $name));
         }
 
         foreach ($this->files as $file) {
@@ -373,7 +372,7 @@ class Packer
         }
 
         if (!@mkdir($dir, 0755, true)) {
-            throw new DirNotWritable(sprintf('Folder %s can not be created', $dir));
+            throw new Exceptions\DirNotWritable(sprintf('Folder %s can not be created', $dir));
         }
     }
 
