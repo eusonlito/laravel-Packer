@@ -5,7 +5,7 @@ class JSTest extends Base
 
     public function testPackOneDefaultRelative()
     {
-        $file = $this->Packer->js('/js/scripts-1.js', 'js/scripts-1.js')->getFilePath();
+        $file = $this->Packer->js('/resources/js/scripts-1.js', 'js/scripts-1.js')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -22,7 +22,7 @@ class JSTest extends Base
 
     public function testPackOneDefaultAbsolute()
     {
-        $file = $this->Packer->js('/js/scripts-1.js', '/cache/js/scripts-1.js')->getFilePath();
+        $file = $this->Packer->js('/resources/js/scripts-1.js', '/cache/js/scripts-1.js')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -41,7 +41,7 @@ class JSTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $this->Packer->js('/js/scripts-1.js', 'js/scripts-1.js');
+        $this->Packer->js('/resources/js/scripts-1.js', 'js/scripts-1.js');
 
         $file = $this->cache.'/js/scripts-1.js';
 
@@ -60,7 +60,7 @@ class JSTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $this->Packer->js('/js/scripts-1.js', '/cache/js/scripts-1.js');
+        $this->Packer->js('/resources/js/scripts-1.js', '/cache/js/scripts-1.js');
 
         $file = $this->cache.'/js/scripts-1.js';
 
@@ -77,7 +77,7 @@ class JSTest extends Base
 
     public function testPackOneAutonameRelative()
     {
-        $file = $this->Packer->js('/js/scripts-1.js', 'js/')->getFilePath();
+        $file = $this->Packer->js('/resources/js/scripts-1.js', 'js/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -90,7 +90,7 @@ class JSTest extends Base
 
     public function testPackOneAutonameAbsolute()
     {
-        $file = $this->Packer->js('/js/scripts-1.js', '/cache/js/')->getFilePath();
+        $file = $this->Packer->js('/resources/js/scripts-1.js', '/cache/js/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -106,8 +106,8 @@ class JSTest extends Base
     public function testPackMultipleDefaultRelative()
     {
         $file = $this->Packer->js([
-            '/js/scripts-1.js',
-            '/js/scripts-2.js'
+            '/resources/js/scripts-1.js',
+            '/resources/js/scripts-2.js'
         ], 'js/scripts.js')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
@@ -126,8 +126,8 @@ class JSTest extends Base
     public function testPackMultipleDefaultAbsolute()
     {
         $file = $this->Packer->js([
-            '/js/scripts-1.js',
-            '/js/scripts-2.js'
+            '/resources/js/scripts-1.js',
+            '/resources/js/scripts-2.js'
         ], '/cache/js/scripts.js')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
@@ -148,8 +148,8 @@ class JSTest extends Base
         $this->Packer->setConfig(['check_timestamps' => false]);
 
         $file = $this->Packer->js([
-            '/js/scripts-1.js',
-            '/js/scripts-2.js'
+            '/resources/js/scripts-1.js',
+            '/resources/js/scripts-2.js'
         ], 'js/scripts.js');
 
         $file = $this->cache.'/js/scripts.js';
@@ -170,8 +170,8 @@ class JSTest extends Base
         $this->Packer->setConfig(['check_timestamps' => false]);
 
         $file = $this->Packer->js([
-            '/js/scripts-1.js',
-            '/js/scripts-2.js'
+            '/resources/js/scripts-1.js',
+            '/resources/js/scripts-2.js'
         ], '/cache/js/scripts.js');
 
         $file = $this->cache.'/js/scripts.js';
@@ -190,8 +190,8 @@ class JSTest extends Base
     public function testPackMultipleAutonameRelative()
     {
         $file = $this->Packer->js([
-            '/js/scripts-1.js',
-            '/js/scripts-2.js'
+            '/resources/js/scripts-1.js',
+            '/resources/js/scripts-2.js'
         ], 'js/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
@@ -206,8 +206,8 @@ class JSTest extends Base
     public function testPackMultipleAutonameAbsolute()
     {
         $file = $this->Packer->js([
-            '/js/scripts-1.js',
-            '/js/scripts-2.js'
+            '/resources/js/scripts-1.js',
+            '/resources/js/scripts-2.js'
         ], '/cache/js/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
@@ -224,8 +224,8 @@ class JSTest extends Base
         $this->Packer->setConfig(['environment' => 'local']);
 
         $packed = $this->Packer->js([
-            '/js/scripts-1.js',
-            '/js/scripts-2.js'
+            '/resources/js/scripts-1.js',
+            '/resources/js/scripts-2.js'
         ], 'js/');
 
         $file = $packed->getFilePath();
@@ -245,7 +245,7 @@ class JSTest extends Base
 
     public function testPackDirectoryDefaultRelative()
     {
-        $file = $this->Packer->jsDir('/js/', 'js/all.js')->getFilePath();
+        $file = $this->Packer->jsDir('/resources/js/', 'js/all.js')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -262,7 +262,7 @@ class JSTest extends Base
 
     public function testPackDirectoryDefaultAbsolute()
     {
-        $file = $this->Packer->jsDir('/js/', '/cache/js/all.js')->getFilePath();
+        $file = $this->Packer->jsDir('/resources/js/', '/cache/js/all.js')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -281,7 +281,7 @@ class JSTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $this->Packer->jsDir('/js/', 'js/all.js');
+        $this->Packer->jsDir('/resources/js/', 'js/all.js');
 
         $file = $this->cache.'/js/all.js';
 
@@ -300,7 +300,7 @@ class JSTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $this->Packer->jsDir('/js/', '/cache/js/all.js');
+        $this->Packer->jsDir('/resources/js/', '/cache/js/all.js');
 
         $file = $this->cache.'/js/all.js';
 
@@ -317,7 +317,7 @@ class JSTest extends Base
 
     public function testPackDirectoryAutonameRelative()
     {
-        $file = $this->Packer->jsDir('/js', 'js/')->getFilePath();
+        $file = $this->Packer->jsDir('/resources/js/', 'js/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -330,7 +330,7 @@ class JSTest extends Base
 
     public function testPackDirectoryAutonameAbsolute()
     {
-        $file = $this->Packer->jsDir('/js/', '/cache/js/')->getFilePath();
+        $file = $this->Packer->jsDir('/resources/js/', '/cache/js/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -343,7 +343,7 @@ class JSTest extends Base
 
     public function testPackDirectoryAutonameAbsoluteRecursive()
     {
-        $file = $this->Packer->jsDir('/', '/cache/js/', true)->getFilePath();
+        $file = $this->Packer->jsDir('/resources/', '/cache/js/', true)->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 

@@ -5,34 +5,34 @@ use org\bovigo\vfs\vfsStream as fs;
 abstract class Base extends PHPUnit_Framework_TestCase
 {
     protected $Packer;
-    protected $FS;
     protected $files = [];
 
     public function setUp()
     {
-        $config = require (__DIR__.'/../src/config/config.php');
+        ini_set('max_execution_time', 0);
+
+        $config = require __DIR__.'/../src/config/config.php';
 
         $config['asset'] = 'http://'.gethostname().'.com/';
         $config['environment'] = 'testing';
         $config['base_folder'] = '/cache/';
         $config['ignore_environemnts'] = ['local'];
 
-        $this->FS = fs::setup('public');
+        $fs = fs::setup('public');
 
-        $js = fs::newDirectory('js')->at($this->FS);
-        $css = fs::newDirectory('css')->at($this->FS);
+        $resources = fs::newDirectory('resources')->at($fs);
+        $js = fs::newDirectory('js')->at($resources);
+        $css = fs::newDirectory('css')->at($resources);
 
         foreach (glob(__DIR__.'/resources/*') as $file) {
-            $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
             $new = fs::newFile(basename($file))
                 ->setContent(file_get_contents($file))
-                ->at($$ext);
+                ->at(${strtolower(pathinfo($file, PATHINFO_EXTENSION))});
         }
 
-        $config['public_path'] = $this->FS->url();
+        $config['public_path'] = $fs->url();
 
-        $this->cache = $this->FS->url().$config['base_folder'];
+        $this->cache = $config['public_path'].$config['base_folder'];
 
         $this->Packer = new Packer($config);
     }

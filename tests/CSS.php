@@ -5,7 +5,7 @@ class CSSTest extends Base
 
     public function testPackOneDefaultRelative()
     {
-        $file = $this->Packer->css('/css/styles-1.css', 'css/styles-1.css')->getFilePath();
+        $file = $this->Packer->css('/resources/css/styles-1.css', 'css/styles-1.css')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -22,7 +22,7 @@ class CSSTest extends Base
 
     public function testPackOneDefaultAbsolute()
     {
-        $file = $this->Packer->css('/css/styles-1.css', '/cache/css/styles-1.css')->getFilePath();
+        $file = $this->Packer->css('/resources/css/styles-1.css', '/cache/css/styles-1.css')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -41,7 +41,7 @@ class CSSTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $this->Packer->css('/css/styles-1.css', 'css/styles-1.css');
+        $this->Packer->css('/resources/css/styles-1.css', 'css/styles-1.css');
 
         $file = $this->cache.'/css/styles-1.css';
 
@@ -60,7 +60,7 @@ class CSSTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $this->Packer->css('/css/styles-1.css', '/cache/css/styles-1.css');
+        $this->Packer->css('/resources/css/styles-1.css', '/cache/css/styles-1.css');
 
         $file = $this->cache.'/css/styles-1.css';
 
@@ -77,7 +77,7 @@ class CSSTest extends Base
 
     public function testPackOneAutonameRelative()
     {
-        $file = $this->Packer->css('/css/styles-1.css', 'css/')->getFilePath();
+        $file = $this->Packer->css('/resources/css/styles-1.css', 'css/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -90,7 +90,7 @@ class CSSTest extends Base
 
     public function testPackOneAutonameAbsolute()
     {
-        $file = $this->Packer->css('/css/styles-1.css', '/cache/css/')->getFilePath();
+        $file = $this->Packer->css('/resources/css/styles-1.css', '/cache/css/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -106,8 +106,8 @@ class CSSTest extends Base
     public function testPackMultipleDefaultRelative()
     {
         $file = $this->Packer->css([
-            '/css/styles-1.css',
-            '/css/styles-2.css'
+            '/resources/css/styles-1.css',
+            '/resources/css/styles-2.css'
         ], 'css/styles.css')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
@@ -126,8 +126,8 @@ class CSSTest extends Base
     public function testPackMultipleDefaultAbsolute()
     {
         $file = $this->Packer->css([
-            '/css/styles-1.css',
-            '/css/styles-2.css'
+            '/resources/css/styles-1.css',
+            '/resources/css/styles-2.css'
         ], '/cache/css/styles.css')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
@@ -148,8 +148,8 @@ class CSSTest extends Base
         $this->Packer->setConfig(['check_timestamps' => false]);
 
         $file = $this->Packer->css([
-            '/css/styles-1.css',
-            '/css/styles-2.css'
+            '/resources/css/styles-1.css',
+            '/resources/css/styles-2.css'
         ], 'css/styles.css');
 
         $file = $this->cache.'/css/styles.css';
@@ -170,8 +170,8 @@ class CSSTest extends Base
         $this->Packer->setConfig(['check_timestamps' => false]);
 
         $file = $this->Packer->css([
-            '/css/styles-1.css',
-            '/css/styles-2.css'
+            '/resources/css/styles-1.css',
+            '/resources/css/styles-2.css'
         ], '/cache/css/styles.css');
 
         $file = $this->cache.'/css/styles.css';
@@ -190,8 +190,8 @@ class CSSTest extends Base
     public function testPackMultipleAutonameRelative()
     {
         $file = $this->Packer->css([
-            '/css/styles-1.css',
-            '/css/styles-2.css'
+            '/resources/css/styles-1.css',
+            '/resources/css/styles-2.css'
         ], 'css/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
@@ -206,8 +206,8 @@ class CSSTest extends Base
     public function testPackMultipleAutonameAbsolute()
     {
         $file = $this->Packer->css([
-            '/css/styles-1.css',
-            '/css/styles-2.css'
+            '/resources/css/styles-1.css',
+            '/resources/css/styles-2.css'
         ], '/cache/css/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
@@ -224,8 +224,8 @@ class CSSTest extends Base
         $this->Packer->setConfig(['environment' => 'local']);
 
         $packed = $this->Packer->css([
-            '/css/styles-1.css',
-            '/css/styles-2.css'
+            '/resources/css/styles-1.css',
+            '/resources/css/styles-2.css'
         ], 'css/');
 
         $file = $packed->getFilePath();
@@ -245,7 +245,7 @@ class CSSTest extends Base
 
     public function testPackDirectoryDefaultRelative()
     {
-        $file = $this->Packer->cssDir('/css/', 'css/all.css')->getFilePath();
+        $file = $this->Packer->cssDir('/resources/css/', 'css/all.css')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -262,7 +262,7 @@ class CSSTest extends Base
 
     public function testPackDirectoryDefaultAbsolute()
     {
-        $file = $this->Packer->cssDir('/css/', '/cache/css/all.css')->getFilePath();
+        $file = $this->Packer->cssDir('/resources/css/', '/cache/css/all.css')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -281,7 +281,7 @@ class CSSTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $this->Packer->cssDir('/css/', 'css/all.css');
+        $this->Packer->cssDir('/resources/css/', 'css/all.css');
 
         $file = $this->cache.'/css/all.css';
 
@@ -300,7 +300,7 @@ class CSSTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $this->Packer->cssDir('/css/', '/cache/css/all.css');
+        $this->Packer->cssDir('/resources/css/', '/cache/css/all.css');
 
         $file = $this->cache.'/css/all.css';
 
@@ -317,7 +317,7 @@ class CSSTest extends Base
 
     public function testPackDirectoryAutonameRelative()
     {
-        $file = $this->Packer->cssDir('/css', 'css/')->getFilePath();
+        $file = $this->Packer->cssDir('/resources/css/', 'css/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -330,7 +330,7 @@ class CSSTest extends Base
 
     public function testPackDirectoryAutonameAbsolute()
     {
-        $file = $this->Packer->cssDir('/css/', '/cache/css/')->getFilePath();
+        $file = $this->Packer->cssDir('/resources/css/', '/cache/css/')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -343,7 +343,7 @@ class CSSTest extends Base
 
     public function testPackDirectoryAutonameAbsoluteRecursive()
     {
-        $file = $this->Packer->cssDir('/', '/cache/css/', true)->getFilePath();
+        $file = $this->Packer->cssDir('/resources/', '/cache/css/', true)->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
