@@ -1,9 +1,9 @@
 # Laravel Packer
 
 [![Build Status](https://travis-ci.org/eusonlito/laravel-Packer.svg?branch=master)](https://travis-ci.org/eusonlito/laravel-Packer)
-[![Latest Stable Version](https://poser.pugx.org/ceesvanegmond/minify/v/stable.png)](https://packagist.org/packages/ceesvanegmond/minify)
-[![Total Downloads](https://poser.pugx.org/ceesvanegmond/minify/downloads.png)](https://packagist.org/packages/ceesvanegmond/minify)
-[![License](https://poser.pugx.org/ceesvanegmond/minify/license.png)](https://packagist.org/packages/ceesvanegmond/minify)
+[![Latest Stable Version](https://poser.pugx.org/laravel/packer/v/stable.png)](https://packagist.org/packages/laravel/packer)
+[![Total Downloads](https://poser.pugx.org/laravel/packer/downloads.png)](https://packagist.org/packages/laravel/packer)
+[![License](https://poser.pugx.org/laravel/packer/license.png)](https://packagist.org/packages/laravel/packer)
 
 Inspired by: https://github.com/ceesvanegmond/minify
 
