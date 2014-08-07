@@ -47,4 +47,13 @@ abstract class ProviderBase
 
         return trim($html);
     }
+
+    /**
+     * @param  string  $path
+     * @return string
+     */
+    protected function path($path)
+    {
+        return preg_replace('#(^|[^:])//+#', '$1/', $path);
+    }
 }

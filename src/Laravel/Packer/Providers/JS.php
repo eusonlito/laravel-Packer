@@ -30,7 +30,7 @@ class JS extends ProviderBase implements ProviderInterface
         }
 
         $attributes = $this->settings['attributes'];
-        $attributes['src'] = $this->settings['asset'].$file;
+        $attributes['src'] = $this->path($this->settings['asset'].$file);
 
         return '<script '.$this->attributes($attributes).'></script>'.PHP_EOL;
     }

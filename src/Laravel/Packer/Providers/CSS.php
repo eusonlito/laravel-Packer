@@ -32,7 +32,7 @@ class CSS extends ProviderBase implements ProviderInterface
         }
 
         $attributes = $this->settings['attributes'];
-        $attributes['href'] = $this->settings['asset'].$file;
+        $attributes['href'] = $this->path($this->settings['asset'].$file);
         $attributes['rel'] = 'stylesheet';
 
         return '<link '.$this->attributes($attributes).' />'.PHP_EOL;
