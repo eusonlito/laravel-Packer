@@ -89,6 +89,14 @@ class Packer
             throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'check_timestamps'));
         }
 
+        if (!isset($config['css_minify'])) {
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'css_minify'));
+        }
+
+        if (!isset($config['js_minify'])) {
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'js_minify'));
+        }
+
         if (!isset($config['environment'])) {
             throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'environment'));
         }
@@ -120,6 +128,7 @@ class Packer
     {
         $this->provider = new Js([
             'asset' => $this->config['asset'],
+            'minify' => $this->config['js_minify'],
             'attributes' => $attributes
         ]);
 
@@ -137,6 +146,7 @@ class Packer
     {
         $this->provider = new JS([
             'asset' => $this->config['asset'],
+            'minify' => $this->config['js_minify'],
             'attributes' => $attributes
         ]);
 
@@ -153,6 +163,7 @@ class Packer
     {
         $this->provider = new CSS([
             'asset' => $this->config['asset'],
+            'minify' => $this->config['css_minify'],
             'attributes' => $attributes
         ]);
 
@@ -170,6 +181,7 @@ class Packer
     {
         $this->provider = new CSS([
             'asset' => $this->config['asset'],
+            'minify' => $this->config['css_minify'],
             'attributes' => $attributes
         ]);
 

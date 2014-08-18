@@ -39,5 +39,29 @@ return array(
     |
     */
 
-    'check_timestamps' => true
+    'check_timestamps' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Check if you want minify css files or only pack together
+    |--------------------------------------------------------------------------
+    |
+    | You can check this option if you want to join and minify all css files or
+    | only join files
+    |
+    */
+
+    'css_minify' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Check if you want minify js files or only pack together
+    |--------------------------------------------------------------------------
+    |
+    | You can check this option if you want to join and minify all js files or
+    | only join files
+    |
+    */
+
+    'js_minify' => true
 );

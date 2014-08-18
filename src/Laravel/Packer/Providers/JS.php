@@ -16,7 +16,11 @@ class JS extends ProviderBase implements ProviderInterface
             return sprintf('/* File %s not exists */', $file);
         }
 
-        return JSMin::minify(file_get_contents($file));
+        if ($this->settings['minify']) {
+            return ';'.JSMin::minify(file_get_contents($file));
+        } else {
+            return ';'.file_get_contents($file);
+        }
     }
 
     /**
