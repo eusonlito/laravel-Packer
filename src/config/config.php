@@ -43,7 +43,7 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
-    | Check if you want minify css files or only pack together
+    | Check if you want minify css files or only pack them together
     |--------------------------------------------------------------------------
     |
     | You can check this option if you want to join and minify all css files or
@@ -55,7 +55,7 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
-    | Check if you want minify js files or only pack together
+    | Check if you want minify js files or only pack them together
     |--------------------------------------------------------------------------
     |
     | You can check this option if you want to join and minify all js files or
