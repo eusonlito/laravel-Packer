@@ -165,6 +165,17 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
+    | Current environment
+    |--------------------------------------------------------------------------
+    |
+    | Set the current server environment. Leave empty to laravel autodetect
+    |
+    */
+
+    'environment' => '',
+
+    /*
+    |--------------------------------------------------------------------------
     | App environments to not pack
     |--------------------------------------------------------------------------
     |
@@ -177,14 +188,38 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
+    | Public accessible path
+    |--------------------------------------------------------------------------
+    |
+    | Set absolute folder path to public view from web. If you are using
+    | laravel, this value will be set with public_path() function
+    |
+    */
+
+    'public_path' => realpath(getenv('DOCUMENT_ROOT')),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Asset absolute location
+    |--------------------------------------------------------------------------
+    |
+    | Set absolute URL location to asset folder. Many times will be same as
+    | public_path but using absolute URL. If you are using laravel, this value
+    | will be set with asset() function
+    |
+    */
+
+    'asset' => 'http://'.getenv('SERVER_NAME').'/',
+
+    /*
+    |--------------------------------------------------------------------------
     | Base folder to store packed files
     |--------------------------------------------------------------------------
     |
     | If you are using relative paths to second paramenter in css and js
     | commands, this files will be created with this folder as base.
     |
-    | This folder in relative to /public/ in laravel or configuration value
-    | 'public_path' outside laravel
+    | This folder in relative to 'public_path' value
     |
     */
 
@@ -227,7 +262,6 @@ return array(
 
     'js_minify' => true
 );
-
 ```
 
 If you set the `'check_timestamps'` option, a timestamp value will be added to final filename.
@@ -239,10 +273,6 @@ require (__DIR__.'/vendor/autoload.php');
 
 // Check default settings
 $config = require (__DIR__.'/src/config/config.php');
-
-$config['environment'] = 'prod'; // Set your current enviroment
-$config['asset'] = 'http://mydomain.com/'; // Set your base url
-$config['public_path'] = __DIR__; // Set your web accesible public folder
 
 $Packer = new Laravel\Packer\Packer($config);
 
