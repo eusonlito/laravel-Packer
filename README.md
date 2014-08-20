@@ -36,6 +36,7 @@ Begin by installing this package through Composer.
 ```
 
 Publish the config file:
+
 ```
 php artisan config:publish laravel/packer
 ```
@@ -44,6 +45,7 @@ When you've added the ```PackerServiceProvider``` an extra ```Packer``` facade i
 You can use this Facade anywhere in your application
 
 #### CSS
+
 ```php
 // app/views/hello.blade.php
 
@@ -83,12 +85,12 @@ You can use this Facade anywhere in your application
         {{ Packer::cssDir(['/css/', '/theme/'], 'css/', true) }}
     </head>
 </html>
-
 ```
 
 CSS `url()` values will be converted to absolute path to avoid file references problems.
 
 #### Javascript
+
 ```php
 // app/views/hello.blade.php
 
@@ -157,6 +159,7 @@ All transform options availables at https://github.com/oscarotero/imageCow
 ```
 
 ### Config
+
 ```php
 return array(
 
@@ -225,4 +228,31 @@ return array(
 );
 
 ```
+
 If you set the `'check_timestamps'` option, a timestamp value will be added to final filename.
+
+### Using Packer outside Laravel
+
+```php
+require (__DIR__.'/vendor/autoload.php');
+
+// Check default settings
+$config = require (__DIR__.'/src/config/config.php');
+
+$config['enviroment'] = 'prod'; // Set your current enviroment
+$config['asset'] = 'http://mydomain.com/'; // Set your base url
+
+$Packer = new Laravel\Packer\Packer($config);
+
+echo $Packer->css([
+    '/resources/css/styles-1.css',
+    '/resources/css/styles-2.css'
+], 'css/styles.css')->render();
+
+echo $Packer->js('/resources/js/scripts.js', 'js/scripts.js')->render();
+
+echo $Packer->js([
+    '/resources/js/scripts-1.js',
+    '/resources/js/scripts-2.js'
+], 'js/')->render();
+```
