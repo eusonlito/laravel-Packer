@@ -71,6 +71,7 @@ class JSMin
     protected $output      = '';
     protected $lastByteOut  = '';
     protected $keptComment = '';
+    protected $keptComments = false;
 
     /**
      * Minify Javascript.
@@ -406,9 +407,9 @@ class JSMin
             if ($get === '*') {
                 if ($this->peek() === '/') { // end of comment reached
                     $this->get();
-                    if (0 === strpos($comment, '!')) {
+                    if ($this->keptComments && (0 === strpos($comment, '!'))) {
                         // preserved by YUI Compressor
-                        if (!$this->keptComment) {
+                        if (empty($this->keptComment)) {
                             // don't prepend a newline if two comments right after one another
                             $this->keptComment = "\n";
                         }
