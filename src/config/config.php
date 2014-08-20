@@ -22,7 +22,8 @@ return array(
     | If you are using relative paths to second paramenter in css and js
     | commands, this files will be created with this folder as base.
     |
-    | This folder in relative to /public/
+    | This folder in relative to /public/ in laravel or configuration value
+    | 'public_path' outside laravel
     |
     */
 

@@ -183,7 +183,8 @@ return array(
     | If you are using relative paths to second paramenter in css and js
     | commands, this files will be created with this folder as base.
     |
-    | This folder in relative to /public/
+    | This folder in relative to /public/ in laravel or configuration value
+    | 'public_path' outside laravel
     |
     */
 
@@ -239,8 +240,9 @@ require (__DIR__.'/vendor/autoload.php');
 // Check default settings
 $config = require (__DIR__.'/src/config/config.php');
 
-$config['enviroment'] = 'prod'; // Set your current enviroment
+$config['environment'] = 'prod'; // Set your current enviroment
 $config['asset'] = 'http://mydomain.com/'; // Set your base url
+$config['public_path'] = __DIR__; // Set your web accesible public folder
 
 $Packer = new Laravel\Packer\Packer($config);
 
