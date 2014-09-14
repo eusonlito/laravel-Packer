@@ -11,6 +11,8 @@ With this package you can pack and minify your existing css and javascript files
 
 Also, you can resize/crop images to adapt thumbnails into your layouts.
 
+If you want a Laravel <= 4.2 compatible version, please use `v4.2` branch.
+
 ## Installation
 
 Begin by installing this package through Composer.
