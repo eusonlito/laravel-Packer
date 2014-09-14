@@ -53,7 +53,7 @@ Now you have a ```Packer``` facade available.
 #### CSS
 
 ```php
-// app/views/hello.blade.php
+// resources/views/hello.blade.php
 
 <html>
     <head>
@@ -98,7 +98,7 @@ CSS `url()` values will be converted to absolute path to avoid file references p
 #### Javascript
 
 ```php
-// app/views/hello.blade.php
+// resources/views/hello.blade.php
 
 <html>
     <body>
@@ -143,7 +143,7 @@ CSS `url()` values will be converted to absolute path to avoid file references p
 All transform options availables at https://github.com/oscarotero/imageCow
 
 ```php
-// app/views/hello.blade.php
+// resources/views/hello.blade.php
 
 <html>
     <body>
