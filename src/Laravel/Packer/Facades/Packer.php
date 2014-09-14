@@ -1,5 +1,4 @@
-<?php
-namespace Laravel\Packer\Facades;
+<?php namespace Laravel\Packer\Facades;
 
 use Illuminate\Support\Facades\Facade;
 
@@ -12,6 +11,6 @@ class Packer extends Facade
      */
     protected static function getFacadeAccessor()
     {
-        return 'Packer';
+        return 'packer';
     }
 }

@@ -1,4 +1,4 @@
-# Laravel Packer
+# Laravel >= 4.3 Packer
 
 [![Build Status](https://travis-ci.org/eusonlito/laravel-Packer.svg?branch=master)](https://travis-ci.org/eusonlito/laravel-Packer)
 [![Latest Stable Version](https://poser.pugx.org/laravel/packer/v/stable.png)](https://packagist.org/packages/laravel/packer)
@@ -27,11 +27,16 @@ Begin by installing this package through Composer.
 
 ```php
 
-// app/config/app.php
+// config/app.php
 
 'providers' => [
     '...',
     'Laravel\Packer\PackerServiceProvider',
+];
+
+'aliases' => [
+    '...',
+    'Packer'    => 'Laravel\Packer\Facades\Packer',
 ];
 ```
 
@@ -41,8 +46,7 @@ Publish the config file:
 php artisan config:publish laravel/packer
 ```
 
-When you've added the ```PackerServiceProvider``` an extra ```Packer``` facade is available.
-You can use this Facade anywhere in your application
+Now you have a ```Packer``` facade available.
 
 #### CSS
 

@@ -49,7 +49,7 @@ abstract class ProviderBase
     }
 
     /**
-     * @param  string  $path
+     * @param  string $path
      * @return string
      */
     protected function path($path)

@@ -1,8 +1,6 @@
-<?php
-namespace Laravel\Packer;
+<?php namespace Laravel\Packer;
 
 use App, Config;
-use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
 class PackerServiceProvider extends ServiceProvider
@@ -12,17 +10,16 @@ class PackerServiceProvider extends ServiceProvider
 	 *
 	 * @var bool
 	 */
-    protected $defer = false;
+    protected $defer = true;
 
     /**
-	 * Bootstrap the application events.
-	 *
-	 * @return void
-	 */
+     * Bootstrap the application events.
+     *
+     * @return void
+     */
     public function boot()
     {
         $this->package('laravel/packer');
-        AliasLoader::getInstance()->alias('Packer', 'Laravel\Packer\Facades\Packer');
     }
 
     /**
@@ -32,7 +29,7 @@ class PackerServiceProvider extends ServiceProvider
 	 */
     public function register()
     {
-        $this->app['Packer'] = $this->app->share(function () {
+        $this->app->bindShared('packer', function () {
             return new Packer($this->config());
         });
     }
@@ -54,7 +51,9 @@ class PackerServiceProvider extends ServiceProvider
      */
     public function config()
     {
-        $config = Config::get('packer::config');
+        Config::get('packer::config');
+
+        $config = Config::getItems()['packer::config'];
 
         if (empty($config['environment'])) {
             $config['environment'] = App::environment();
