@@ -1,4 +1,4 @@
-# Laravel Packer
+# Laravel 4.2 Packer
 
 [![Build Status](https://travis-ci.org/eusonlito/laravel-Packer.svg?branch=master)](https://travis-ci.org/eusonlito/laravel-Packer)
 [![Latest Stable Version](https://poser.pugx.org/laravel/packer/v/stable.png)](https://packagist.org/packages/laravel/packer)
@@ -11,6 +11,8 @@ With this package you can pack and minify your existing css and javascript files
 
 Also, you can resize/crop images to adapt thumbnails into your layouts.
 
+If you want a Laravel >= 4.3 compatible version, please use `master` branch.
+
 ## Installation
 
 Begin by installing this package through Composer.
@@ -18,7 +20,7 @@ Begin by installing this package through Composer.
 ```js
 {
     "require": {
-        "laravel/packer": "master-dev"
+        "laravel/packer": "v4.2"
     }
 }
 ```
