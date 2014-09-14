@@ -210,8 +210,6 @@ class CSSTest extends Base
 
         $this->assertTrue(substr_count($packed->render(), 'rel="stylesheet"') === 2, 'Local environment get 2 tags to original files');
 
-        unlink($file);
-
         $this->Packer->setConfig(['environment' => 'testing']);
     }
 

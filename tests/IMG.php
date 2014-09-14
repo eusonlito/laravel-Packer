@@ -96,8 +96,6 @@ class IMGTest extends Base
 
         $this->assertFileNotExists($file, sprintf('File %s not exists', $file));
 
-        unlink($file);
-
         $this->Packer->setConfig(['check_timestamps' => true]);
     }
 }
