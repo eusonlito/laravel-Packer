@@ -20,7 +20,7 @@ Begin by installing this package through Composer.
 ```js
 {
     "require": {
-        "laravel/packer": "v4.2"
+        "laravel/packer": "4.2.x-dev"
     }
 }
 ```
