@@ -208,7 +208,7 @@ class Packer
             throw new Exceptions\InvalidArgument('Only jpg/jpeg/png/gif files are supported as valid images');
         }
 
-        $name = $name ?: 'images/';
+        $name = $name ?: 'images/'.md5($file).'.'.$ext;
         $md5 = md5($transform).'/';
 
         if (preg_match('/\.('.implode('|', $valid).')$/i', $name)) {
@@ -228,9 +228,7 @@ class Packer
             'attributes' => $attributes
         ]);
 
-        $src = $this->load($ext, $file, $name);
-
-        return $src;
+        return $this->load($ext, $file, $name);
     }
 
     /**
