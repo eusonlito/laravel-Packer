@@ -4,7 +4,6 @@ namespace Laravel\Packer;
 use Laravel\Packer\Providers\JS;
 use Laravel\Packer\Providers\CSS;
 use Laravel\Packer\Providers\IMG;
-use Laravel\Packer\Exceptions;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -81,8 +80,8 @@ class Packer
             throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'ignore_environments'));
         }
 
-        if (!isset($config['base_folder'])) {
-            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'base_folder'));
+        if (!isset($config['cache_folder'])) {
+            throw new Exceptions\InvalidArgument(sprintf('Missing option %s', 'cache_folder'));
         }
 
         if (!isset($config['check_timestamps'])) {
@@ -190,13 +189,13 @@ class Packer
 
     /**
      * @param  string                     $file
-     * @param  string                     $name
      * @param  string                     $transform
+     * @param  string                     $name
      * @param  array                      $attributes
      * @throws Exceptions\InvalidArgument
      * @return this
      */
-    public function img($file, $name, $transform, array $attributes = [])
+    public function img($file, $transform, $name = '', array $attributes = [])
     {
         if (!is_string($file)) {
             throw new Exceptions\InvalidArgument('img function only supports strings');
@@ -209,6 +208,7 @@ class Packer
             throw new Exceptions\InvalidArgument('Only jpg/jpeg/png/gif files are supported as valid images');
         }
 
+        $name = $name ?: 'images/';
         $md5 = md5($transform).'/';
 
         if (preg_match('/\.('.implode('|', $valid).')$/i', $name)) {
@@ -286,7 +286,7 @@ class Packer
         $this->files = is_array($files) ? $files : [$files];
 
         if (strpos($name, '/') !== 0) {
-            $name = $this->path('', $this->config['base_folder'].'/'.$name);
+            $name = $this->path('', $this->config['cache_folder'].'/'.$name);
         }
 
         if (preg_match('/\.'.$type.'$/i', $name)) {

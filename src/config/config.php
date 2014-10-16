@@ -52,7 +52,7 @@ return array(
 
     /*
     |--------------------------------------------------------------------------
-    | Base folder to store packed files
+    | Cache folder to store packed files
     |--------------------------------------------------------------------------
     |
     | If you are using relative paths to second paramenter in css and js
@@ -62,7 +62,7 @@ return array(
     |
     */
 
-    'base_folder' => '/storage/cache/',
+    'cache_folder' => '/storage/cache/',
 
     /*
     |--------------------------------------------------------------------------
