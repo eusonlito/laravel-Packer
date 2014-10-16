@@ -8,7 +8,7 @@ class IMGTest extends Base
         $file = null;
 
         try {
-            $file = $this->Packer->img('/resources/img/image-1.png', 'img/image-1.png')->getFilePath();
+            $file = $this->Packer->img('/resources/img/image-1.png')->getFilePath();
             $this->fail('Must fail with missing argument');
         } catch (Exception $e) {
             $this->assertTrue(strstr($e->getMessage(), 'Missing argument 3') ? true : false, 'Must return missing argument');
@@ -27,7 +27,7 @@ class IMGTest extends Base
 
         $this->setExpectedException('Laravel\Packer\Exceptions\InvalidArgument', 'valid images');
 
-        $file = $this->Packer->img('/resources/img/image-1.bmp', 'img/image-1.bmp', 'resizeCrop,400,400')->getFilePath();
+        $file = $this->Packer->img('/resources/img/image-1.bmp', 'resizeCrop,400,400', 'img/image-1.bmp')->getFilePath();
 
         $this->assertTrue($file === null);
     }
@@ -41,14 +41,14 @@ class IMGTest extends Base
         $file = $this->Packer->img([
             '/resources/img/image-1.png',
             '/resources/img/image-1.png'
-        ], 'img/image-1.jpg', 'resizeCrop,400,400')->getFilePath();
+        ], 'resizeCrop,400,400', 'img/image-1.jpg')->getFilePath();
 
         $this->assertTrue($file === null);
     }
 
     public function testPackOneDefaultRelative()
     {
-        $file = $this->Packer->img('/resources/img/image-1.png', 'img/image-1.png', 'resizeCrop,400,400')->getFilePath();
+        $file = $this->Packer->img('/resources/img/image-1.png', 'resizeCrop,400,400', 'img/image-1.png')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -65,7 +65,7 @@ class IMGTest extends Base
 
     public function testPackOneDefaultAbsolute()
     {
-        $file = $this->Packer->img('/resources/img/image-1.png', '/storage/cache/img/image-1.png', 'resizeCrop,400,400')->getFilePath();
+        $file = $this->Packer->img('/resources/img/image-1.png', 'resizeCrop,400,400', '/storage/cache/img/image-1.png')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
@@ -84,7 +84,7 @@ class IMGTest extends Base
     {
         $this->Packer->setConfig(['check_timestamps' => false]);
 
-        $file = $this->Packer->img('/resources/img/image-1.png', '/storage/cache/img/image-1.png', 'resizeCrop,400,400')->getFilePath();
+        $file = $this->Packer->img('/resources/img/image-1.png', 'resizeCrop,400,400', '/storage/cache/img/image-1.png')->getFilePath();
 
         $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
 
