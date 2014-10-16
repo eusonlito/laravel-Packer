@@ -11,7 +11,7 @@ class IMGTest extends Base
             $file = $this->Packer->img('/resources/img/image-1.png')->getFilePath();
             $this->fail('Must fail with missing argument');
         } catch (Exception $e) {
-            $this->assertTrue(strstr($e->getMessage(), 'Missing argument 3') ? true : false, 'Must return missing argument');
+            $this->assertTrue(strstr($e->getMessage(), 'Missing argument 2') ? true : false, 'Must return missing argument');
         }
 
         $this->assertTrue($file === null);
