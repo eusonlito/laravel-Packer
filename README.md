@@ -60,13 +60,13 @@ Now you have a ```Packer``` facade available.
         // Pack a simple file
         {{ Packer::css('/css/main.css', '/storage/cache/css/main.css') }}
 
-        // Pack a simple file using base_folder option as storage folder to packed file
+        // Pack a simple file using cache_folder option as storage folder to packed file
         {{ Packer::css('/css/main.css', 'css/main.css') }}
 
         // Packing multiple files
         {{ Packer::css(['/css/main.css', '/css/bootstrap.css'], '/storage/cache/css/styles.css') }}
 
-        // Packing multiple files using base_folder option as storage folder to packed file
+        // Packing multiple files using cache_folder option as storage folder to packed file
         {{ Packer::css(['/css/main.css', '/css/bootstrap.css'], 'css/styles.css') }}
 
         // Packing multiple files with autonaming based
@@ -75,7 +75,7 @@ Now you have a ```Packer``` facade available.
         // pack and combine all css files in given folder
         {{ Packer::cssDir('/css/', '/storage/cache/css/all.css') }}
 
-        // pack and combine all css files in given folder using base_folder option as storage folder to packed file
+        // pack and combine all css files in given folder using cache_folder option as storage folder to packed file
         {{ Packer::cssDir('/css/', 'css/all.css') }}
 
         // Packing multiple folders
@@ -87,7 +87,7 @@ Now you have a ```Packer``` facade available.
         // Packing multiple folders with recursive search and autonaming
         {{ Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/', true) }}
 
-        // Packing multiple folders with recursive search and autonaming using base_folder option as storage folder to packed file
+        // Packing multiple folders with recursive search and autonaming using cache_folder option as storage folder to packed file
         {{ Packer::cssDir(['/css/', '/theme/'], 'css/', true) }}
     </head>
 </html>
@@ -106,13 +106,13 @@ CSS `url()` values will be converted to absolute path to avoid file references p
         // Pack a simple file
         {{ Packer::js('/js/main.js', '/storage/cache/js/main.js') }}
 
-        // Pack a simple file using base_folder option as storage folder to packed file
+        // Pack a simple file using cache_folder option as storage folder to packed file
         {{ Packer::js('/js/main.js', 'js/main.js') }}
 
         // Packing multiple files
         {{ Packer::js(['/js/main.js', '/js/bootstrap.js'], '/storage/cache/js/styles.js') }}
 
-        // Packing multiple files using base_folder option as storage folder to packed file
+        // Packing multiple files using cache_folder option as storage folder to packed file
         {{ Packer::js(['/js/main.js', '/js/bootstrap.js'], 'js/styles.js') }}
 
         // Packing multiple files with autonaming based
@@ -121,7 +121,7 @@ CSS `url()` values will be converted to absolute path to avoid file references p
         // pack and combine all js files in given folder
         {{ Packer::jsDir('/js/', '/storage/cache/js/all.js') }}
 
-        // pack and combine all js files in given folder using base_folder option as storage folder to packed file
+        // pack and combine all js files in given folder using cache_folder option as storage folder to packed file
         {{ Packer::jsDir('/js/', 'js/all.js') }}
 
         // Packing multiple folders
@@ -133,7 +133,7 @@ CSS `url()` values will be converted to absolute path to avoid file references p
         // Packing multiple folders with recursive search and autonaming
         {{ Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/', true) }}
 
-        // Packing multiple folders with recursive search and autonaming using base_folder option as storage folder to packed file
+        // Packing multiple folders with recursive search and autonaming using cache_folder option as storage folder to packed file
         {{ Packer::jsDir(['/js/', '/theme/'], 'js/', true) }}
     </body>
 </html>
@@ -154,10 +154,10 @@ All transform options availables at https://github.com/oscarotero/imageCow
         // Crop image to 200px square
         <img src="{{ Packer::img('/images/picture.jpg', '/storage/cache/images/', 'resizeCrop,200,200') }}" />
 
-        // Crop image to 200px square center middle using base_folder parameter
+        // Crop image to 200px square center middle using cache_folder parameter
         <img src="{{ Packer::img('/images/picture.jpg', 'images/', 'resizeCrop,200,200') }}" />
 
-        // Crop image to 200px square center top using base_folder parameter
+        // Crop image to 200px square center top using cache_folder parameter
         <img src="{{ Packer::img('/images/picture.jpg', 'images/', 'resizeCrop,200,200,center,top') }}" />
     </body>
 </html>
@@ -229,7 +229,7 @@ return array(
     |
     */
 
-    'base_folder' => '/storage/cache/',
+    'cache_folder' => '/storage/cache/',
 
     /*
     |--------------------------------------------------------------------------

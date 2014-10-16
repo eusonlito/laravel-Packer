@@ -15,7 +15,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
         $config['asset'] = 'http://'.gethostname().'.com/';
         $config['environment'] = 'testing';
-        $config['base_folder'] = '/cache/';
+        $config['cache_folder'] = '/cache/';
         $config['ignore_environemnts'] = ['local'];
 
         $fs = fs::setup('public');
@@ -37,7 +37,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
         $config['public_path'] = $fs->url();
 
-        $this->cache = $config['public_path'].$config['base_folder'];
+        $this->cache = $config['public_path'].$config['cache_folder'];
 
         $this->Packer = new Packer($config);
     }
