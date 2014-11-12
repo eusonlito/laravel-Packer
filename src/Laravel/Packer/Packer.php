@@ -201,17 +201,18 @@ class Packer
             throw new Exceptions\InvalidArgument('img function only supports strings');
         }
 
-        $valid = ['jpg', 'jpeg', 'png', 'gif'];
+        $this->provider = new IMG([
+            'asset' => $this->config['asset'],
+            'fake' => $this->config['images_fake'],
+            'transform' => $transform,
+            'attributes' => $attributes
+        ]);
+
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-        if (!in_array($ext, $valid, true)) {
-            throw new Exceptions\InvalidArgument('Only jpg/jpeg/png/gif files are supported as valid images');
-        }
-
         $name = $name ?: 'images/'.md5($file).'.'.$ext;
         $md5 = md5($transform).'/';
 
-        if (preg_match('/\.('.implode('|', $valid).')$/i', $name)) {
+        if ($this->provider->isImage($name)) {
             $name = dirname($name).'/'.$md5.basename($name);
         } elseif (substr($name, -1) === '/') {
             $name .= $md5;
@@ -221,12 +222,6 @@ class Packer
 
         $this->force['previous'] = $this->force['current'];
         $this->force['current'] = true;
-
-        $this->provider = new IMG([
-            'asset' => $this->config['asset'],
-            'transform' => $transform,
-            'attributes' => $attributes
-        ]);
 
         return $this->load($ext, $file, $name);
     }

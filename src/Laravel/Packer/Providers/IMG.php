@@ -5,6 +5,34 @@ use Imagecow\Image;
 
 class IMG extends ProviderBase implements ProviderInterface
 {
+    public function isImage($file)
+    {
+        $valid = ['jpg', 'jpeg', 'png', 'gif'];
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+        return in_array($ext, $valid, true);
+    }
+    /**
+     * @param  string $file
+     * @return string
+     */
+    public function check($file)
+    {
+        return ($this->isImage($file) && is_file($file)) ? $file : $this->fake();
+    }
+
+    /**
+     * @return string
+     */
+    public function fake()
+    {
+        if (empty($this->settings['fake'])) {
+            return false;
+        }
+
+        return realpath(__DIR__.'/../../../images/'.rand(1, 8).'.jpg');
+    }
+
     /**
      * @param  string $file
      * @param  string $public
@@ -12,7 +40,7 @@ class IMG extends ProviderBase implements ProviderInterface
      */
     public function pack($file, $public)
     {
-        if (!is_file($file)) {
+        if (!($file = $this->check($file))) {
             return;
         }
 
