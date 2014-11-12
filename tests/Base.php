@@ -15,7 +15,7 @@ abstract class Base extends PHPUnit_Framework_TestCase
 
         $config['asset'] = 'http://'.gethostname().'.com/';
         $config['environment'] = 'testing';
-        $config['cache_folder'] = '/cache/';
+        $config['cache_folder'] = '/cache';
         $config['ignore_environemnts'] = ['local'];
 
         $fs = fs::setup('public');

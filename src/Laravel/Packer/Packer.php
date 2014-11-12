@@ -190,43 +190,46 @@ class Packer
     /**
      * @param  string                     $file
      * @param  string                     $transform
-     * @param  string                     $name
+     * @param  string                     $new
      * @param  array                      $attributes
      * @throws Exceptions\InvalidArgument
      * @return this
      */
-    public function img($file, $transform, $name = '', array $attributes = [])
+    public function img($file, $transform, $new = '', array $attributes = [])
     {
         if (!is_string($file)) {
             throw new Exceptions\InvalidArgument('img function only supports strings');
         }
 
-        $valid = ['jpg', 'jpeg', 'png', 'gif'];
-        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        $this->provider = new IMG([
+            'asset' => $this->config['asset'],
+            'fake' => $this->config['images_fake'],
+            'transform' => $transform,
+            'attributes' => $attributes
+        ]);
 
-        if (!in_array($ext, $valid, true)) {
-            throw new Exceptions\InvalidArgument('Only jpg/jpeg/png/gif files are supported as valid images');
+        if (!$this->provider->check($this->path('public', $file))) {
+            $this->file = false;
+
+            return $this;
         }
 
-        $name = $name ?: 'images/'.md5($file).'.'.$ext;
+        $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        $name = $new ?: ('images/'.md5($file).'.'.$ext);
         $md5 = md5($transform).'/';
 
-        if (preg_match('/\.('.implode('|', $valid).')$/i', $name)) {
-            $name = dirname($name).'/'.$md5.basename($name);
-        } elseif (substr($name, -1) === '/') {
-            $name .= $md5;
-        } else {
-            $name .= '/'.$md5;
+        if (empty($new)) {
+            if ($this->provider->isImage($name)) {
+                $name = dirname($name).'/'.$md5.basename($name);
+            } elseif (substr($name, -1) === '/') {
+                $name .= $md5;
+            } else {
+                $name .= '/'.$md5;
+            }
         }
 
         $this->force['previous'] = $this->force['current'];
         $this->force['current'] = true;
-
-        $this->provider = new IMG([
-            'asset' => $this->config['asset'],
-            'transform' => $transform,
-            'attributes' => $attributes
-        ]);
 
         return $this->load($ext, $file, $name);
     }
