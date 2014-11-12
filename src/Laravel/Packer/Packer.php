@@ -190,12 +190,12 @@ class Packer
     /**
      * @param  string                     $file
      * @param  string                     $transform
-     * @param  string                     $name
+     * @param  string                     $new
      * @param  array                      $attributes
      * @throws Exceptions\InvalidArgument
      * @return this
      */
-    public function img($file, $transform, $name = '', array $attributes = [])
+    public function img($file, $transform, $new = '', array $attributes = [])
     {
         if (!is_string($file)) {
             throw new Exceptions\InvalidArgument('img function only supports strings');
@@ -208,16 +208,24 @@ class Packer
             'attributes' => $attributes
         ]);
 
+        if (!$this->provider->check($this->path('public', $file))) {
+            $this->file = false;
+
+            return $this;
+        }
+
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-        $name = $name ?: 'images/'.md5($file).'.'.$ext;
+        $name = $new ?: ('images/'.md5($file).'.'.$ext);
         $md5 = md5($transform).'/';
 
-        if ($this->provider->isImage($name)) {
-            $name = dirname($name).'/'.$md5.basename($name);
-        } elseif (substr($name, -1) === '/') {
-            $name .= $md5;
-        } else {
-            $name .= '/'.$md5;
+        if (empty($new)) {
+            if ($this->provider->isImage($name)) {
+                $name = dirname($name).'/'.$md5.basename($name);
+            } elseif (substr($name, -1) === '/') {
+                $name .= $md5;
+            } else {
+                $name .= '/'.$md5;
+            }
         }
 
         $this->force['previous'] = $this->force['current'];

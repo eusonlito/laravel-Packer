@@ -5,6 +5,10 @@ use Imagecow\Image;
 
 class IMG extends ProviderBase implements ProviderInterface
 {
+    /**
+     * @param  string  $file
+     * @return boolean
+     */
     public function isImage($file)
     {
         $valid = ['jpg', 'jpeg', 'png', 'gif'];
@@ -12,6 +16,7 @@ class IMG extends ProviderBase implements ProviderInterface
 
         return in_array($ext, $valid, true);
     }
+
     /**
      * @param  string $file
      * @return string
