@@ -144,17 +144,17 @@ All transform options availables at https://github.com/oscarotero/imageCow
 <html>
     <body>
     ...
-        // Set width size to 500px
-        <img src="{{ Packer::img('/images/picture.jpg', '/storage/cache/images/', 'resize,500') }}" />
+        // Set width size to 500px using cache_folder default parameter (from settings)
+        <img src="{{ Packer::img('/images/picture.jpg', 'resize,500') }}" />
 
-        // Crop image to 200px square
-        <img src="{{ Packer::img('/images/picture.jpg', '/storage/cache/images/', 'resizeCrop,200,200') }}" />
+        // Crop image to 200px square with custom cache folder (full path)
+        <img src="{{ Packer::img('/images/picture.jpg', 'resizeCrop,200,200', '/storage/cache/images/') }}" />
 
-        // Crop image to 200px square center middle using cache_folder parameter
-        <img src="{{ Packer::img('/images/picture.jpg', 'images/', 'resizeCrop,200,200') }}" />
+        // Crop image to 200px square center middle with custom cache folder (using cache_folder as base)
+        <img src="{{ Packer::img('/images/picture.jpg', 'resizeCrop,200,200', 'images/') }}" />
 
-        // Crop image to 200px square center top using cache_folder parameter
-        <img src="{{ Packer::img('/images/picture.jpg', 'images/', 'resizeCrop,200,200,center,top') }}" />
+        // Crop image to 200px square center top with custom cache folder (using cache_folder as base)
+        <img src="{{ Packer::img('/images/picture.jpg', 'resizeCrop,200,200,center,top', 'images/') }}" />
     </body>
 </html>
 
