@@ -266,7 +266,20 @@ return array(
     |
     */
 
-    'js_minify' => true
+    'js_minify' => true,
+
+    /*
+    |--------------------------------------------------------------------------
+    | Use fake images stored in src/images/ when original image does not exists
+    |--------------------------------------------------------------------------
+    |
+    | You can use fake images in your developments to avoid not existing
+    | original images problems. Fake images are stored in src/images/ and used
+    | with a rand
+    |
+    */
+
+    'images_fake' => true
 );
 ```
 
