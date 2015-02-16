@@ -38,14 +38,14 @@ Begin by installing this package through Composer.
 
 'aliases' => [
     '...',
-    'Packer'    => 'Laravel\Packer\Facades\Packer',
+    'Packer'    => 'Laravel\Packer\Facade',
 ];
 ```
 
 Publish the config file:
 
 ```
-php artisan config:publish laravel/packer
+php artisan vendor:publish
 ```
 
 Now you have a ```Packer``` facade available.

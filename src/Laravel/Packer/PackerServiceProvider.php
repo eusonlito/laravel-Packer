@@ -1,9 +1,8 @@
 <?php namespace Laravel\Packer;
 
 use App, Config;
-use Illuminate\Support\ServiceProvider;
 
-class PackerServiceProvider extends ServiceProvider
+class PackerServiceProvider extends \Illuminate\Support\ServiceProvider
 {
     /**
 	 * Indicates if loading of the provider is deferred.
@@ -19,7 +18,9 @@ class PackerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->package('laravel/packer');
+        $this->publishes([
+            __DIR__.'/../../config/config.php' => config_path('packer.php')
+        ]);
     }
 
     /**
@@ -29,7 +30,7 @@ class PackerServiceProvider extends ServiceProvider
 	 */
     public function register()
     {
-        $this->app->bindShared('packer', function () {
+        $this->app['packer'] = $this->app->share(function($app) {
             return new Packer($this->config());
         });
     }
@@ -51,9 +52,7 @@ class PackerServiceProvider extends ServiceProvider
      */
     public function config()
     {
-        Config::get('packer::config');
-
-        $config = Config::getItems()['packer::config'];
+        $config = Config::get('packer');
 
         if (empty($config['environment'])) {
             $config['environment'] = App::environment();

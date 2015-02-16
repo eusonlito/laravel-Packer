@@ -1,8 +1,6 @@
-<?php namespace Laravel\Packer\Facades;
+<?php namespace Laravel\Packer;
 
-use Illuminate\Support\Facades\Facade;
-
-class Packer extends Facade
+class Packer extends \Illuminate\Support\Facades\Facade
 {
     /**
      * Name of the binding in the IoC container
