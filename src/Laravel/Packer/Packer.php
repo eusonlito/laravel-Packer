@@ -345,7 +345,7 @@ class Packer
         $this->checkDir(dirname($this->file));
 
         if (!($fp = @fopen($this->file, 'c'))) {
-            throw new Exceptions\FileNotWritable(sprintf('File %s can not be created', $name));
+            throw new Exceptions\FileNotWritable(sprintf('File %s can not be created', $this->file));
         }
 
         foreach ($this->files as $file) {
