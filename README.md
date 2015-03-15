@@ -1,4 +1,4 @@
-# Laravel >= 4.3 Packer
+# Laravel >= 5 Packer
 
 [![Build Status](https://travis-ci.org/eusonlito/laravel-Packer.svg?branch=master)](https://travis-ci.org/eusonlito/laravel-Packer)
 [![Latest Stable Version](https://poser.pugx.org/laravel/packer/v/stable.png)](https://packagist.org/packages/laravel/packer)
