@@ -1,9 +1,9 @@
 <?php
-namespace Laravel\Packer;
+namespace Eusonlito\LaravelPacker;
 
-use Laravel\Packer\Providers\JS;
-use Laravel\Packer\Providers\CSS;
-use Laravel\Packer\Providers\IMG;
+use Eusonlito\LaravelPacker\Providers\JS;
+use Eusonlito\LaravelPacker\Providers\CSS;
+use Eusonlito\LaravelPacker\Providers\IMG;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;

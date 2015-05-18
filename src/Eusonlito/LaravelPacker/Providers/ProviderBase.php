@@ -1,5 +1,5 @@
 <?php
-namespace Laravel\Packer\Providers;
+namespace Eusonlito\LaravelPacker\Providers;
 
 abstract class ProviderBase
 {

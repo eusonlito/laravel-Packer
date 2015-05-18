@@ -34,7 +34,7 @@ class IMGTest extends Base
     {
         $file = null;
 
-        $this->setExpectedException('Laravel\Packer\Exceptions\InvalidArgument', 'supports strings');
+        $this->setExpectedException('Eusonlito\LaravelPacker\Exceptions\InvalidArgument', 'supports strings');
 
         $file = $this->Packer->img([
             '/resources/img/image-1.png',

@@ -1,5 +1,5 @@
 <?php
-namespace Laravel\Packer\Exceptions;
+namespace Eusonlito\LaravelPacker\Exceptions;
 
 use Exception;
 

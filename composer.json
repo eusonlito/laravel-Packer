@@ -1,5 +1,5 @@
 {
-    "name": "laravel/packer",
+    "name": "eusonlito/laravel-packer",
     "keywords": ["packer", "minify", "laravel"],
     "description": "A package for pack css and javascript files",
     "license": "MIT",
@@ -19,13 +19,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Laravel\\Packer\\": "src/Laravel/Packer/"
+            "Eusonlito\\LaravelPacker\\": "src/Eusonlito/LaravelPacker/"
         },
         "classmap": [
-            "src/Laravel/Packer/Processors/"
+            "src/Eusonlito/LaravelPacker/Processors/"
         ],
         "files": [
-                "src/Laravel/Packer/Exceptions.php"
+            "src/Eusonlito/LaravelPacker/Exceptions.php"
         ]
     },
     "minimum-stability": "stable"

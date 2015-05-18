@@ -1,4 +1,5 @@
-<?php namespace Laravel\Packer;
+<?php
+namespace Eusonlito\LaravelPacker;
 
 use App, Config;
 

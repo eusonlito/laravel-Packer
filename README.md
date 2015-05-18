@@ -20,7 +20,7 @@ Begin by installing this package through Composer.
 ```js
 {
     "require": {
-        "laravel/packer": "master-dev"
+        "eusonlito/laravel-packer": "master-dev"
     }
 }
 ```
@@ -33,12 +33,12 @@ Begin by installing this package through Composer.
 
 'providers' => [
     '...',
-    'Laravel\Packer\PackerServiceProvider',
+    'Eusonlito\LaravelPacker\PackerServiceProvider',
 ];
 
 'aliases' => [
     '...',
-    'Packer'    => 'Laravel\Packer\Facade',
+    'Packer'    => 'Eusonlito\LaravelPacker\Facade',
 ];
 ```
 
@@ -293,7 +293,7 @@ require (__DIR__.'/vendor/autoload.php');
 // Check default settings
 $config = require (__DIR__.'/src/config/config.php');
 
-$Packer = new Laravel\Packer\Packer($config);
+$Packer = new Eusonlito\LaravelPacker\Packer($config);
 
 echo $Packer->css([
     '/resources/css/styles-1.css',

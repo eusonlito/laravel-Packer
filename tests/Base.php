@@ -1,5 +1,5 @@
 <?php
-use Laravel\Packer\Packer;
+use Eusonlito\LaravelPacker\Packer;
 use org\bovigo\vfs\vfsStream as fs;
 
 abstract class Base extends PHPUnit_Framework_TestCase
