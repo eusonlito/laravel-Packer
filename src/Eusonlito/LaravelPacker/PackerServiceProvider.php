@@ -31,7 +31,7 @@ class PackerServiceProvider extends ServiceProvider
 	 */
     public function register()
     {
-        $this->app->singleton('Packer', function($app) {
+        $this->app->singleton('packer', function($app) {
             return new Packer($this->config());
         });
     }
