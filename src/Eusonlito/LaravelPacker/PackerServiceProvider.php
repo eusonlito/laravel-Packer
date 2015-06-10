@@ -1,9 +1,9 @@
 <?php
 namespace Eusonlito\LaravelPacker;
 
-use App, Config;
+use Illuminate\Support\ServiceProvider;
 
-class PackerServiceProvider extends \Illuminate\Support\ServiceProvider
+class PackerServiceProvider extends ServiceProvider
 {
     /**
 	 * Indicates if loading of the provider is deferred.
@@ -53,10 +53,10 @@ class PackerServiceProvider extends \Illuminate\Support\ServiceProvider
      */
     public function config()
     {
-        $config = Config::get('packer');
+        $config = config('packer');
 
         if (empty($config['environment'])) {
-            $config['environment'] = App::environment();
+            $config['environment'] = app()->environment();
         }
 
         $config['public_path'] = public_path();
