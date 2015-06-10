@@ -31,7 +31,7 @@ class PackerServiceProvider extends ServiceProvider
 	 */
     public function register()
     {
-        $this->app['packer'] = $this->app->share(function($app) {
+        $this->app->singleton('Packer', function($app) {
             return new Packer($this->config());
         });
     }
