@@ -205,6 +205,7 @@ class Packer
             'asset' => $this->config['asset'],
             'fake' => $this->config['images_fake'],
             'transform' => $transform,
+            'quality' => (isset($this->config['quality']) ? $this->config['quality'] : null),
             'attributes' => $attributes
         ]);
 
