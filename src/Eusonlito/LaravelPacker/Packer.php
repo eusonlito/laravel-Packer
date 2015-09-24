@@ -216,23 +216,27 @@ class Packer
         }
 
         $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-        $name = $new ?: ('images/'.md5($file).'.'.$ext);
-        $md5 = md5($transform).'/';
-
-        if (empty($new)) {
-            if ($this->provider->isImage($name)) {
-                $name = dirname($name).'/'.$md5.basename($name);
-            } elseif (substr($name, -1) === '/') {
-                $name .= $md5;
-            } else {
-                $name .= '/'.$md5;
-            }
-        }
+        $name = $new ?: $this->getImgName($file, $transform);
 
         $this->force['previous'] = $this->force['current'];
         $this->force['current'] = true;
 
         return $this->load($ext, $file, $name);
+    }
+
+    private function getImgName($file, $transform)
+    {
+        if (preg_match('/^[^0-9]+([0-9]+),([0-9]+).*$/', $transform)) {
+            $transform = preg_replace('/^[^0-9]+([0-9]+),([0-9]+).*$/', '$1x$2', $transform);;
+        } elseif (preg_match('/^[^,]+,([0-9]+).*$/', $transform)) {
+            $transform = preg_replace('/^[^,]+,([0-9]+).*$/', '$1', $transform);;
+        } else {
+            $transform = preg_replace('/^([^,]+).*$/', '$1', $transform);
+        }
+
+        $name = preg_replace('/[^a-z0-9\-\_\.]/', '', strtolower(basename($file)));
+
+        return 'images/'.substr(md5($file.$transform), 0, 3).'/'.$transform.'_'.$name;
     }
 
     /**
