@@ -2,6 +2,7 @@
 namespace Eusonlito\LaravelPacker\Providers;
 
 use JSMin;
+use Eusonlito\LaravelPacker\Packer;
 
 class JS extends ProviderBase implements ProviderInterface
 {
@@ -12,15 +13,17 @@ class JS extends ProviderBase implements ProviderInterface
      */
     public function pack($file, $public)
     {
-        if (!is_file($file)) {
+        if (!Packer::isRemote($file) && !is_file($file)) {
             return sprintf('/* File %s not exists */', $file);
         }
 
+        $contents = file_get_contents($file);
+
         if ($this->settings['minify']) {
-            return ';'.JSMin::minify(file_get_contents($file));
-        } else {
-            return ';'.file_get_contents($file);
+            $contents = JSMin::minify($contents);
         }
+
+        return ';'.$contents;
     }
 
     /**

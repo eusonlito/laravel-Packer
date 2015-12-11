@@ -319,10 +319,14 @@ class Packer
 
         if ($this->files && !$this->isLocal() && ($this->config['check_timestamps'] === true)) {
             $this->newer = max(array_map(function ($file) {
-                if (is_file($file = $this->path('public', $file))) {
+                if (!static::isRemote($file) && is_file($file = $this->path('public', $file))) {
                     return filemtime($file);
                 }
             }, $this->files));
+
+            if (empty($this->newer)) {
+                $this->newer = md5(implode($this->files));
+            }
 
             $this->name = $this->newer.'-'.$this->name;
         }
@@ -340,6 +344,10 @@ class Packer
      */
     public function path($name, $location = '')
     {
+        if (preg_match('#^https?://#', $location)) {
+            return $location;
+        }
+
         if ($name === '') {
             $path = '';
         } elseif ($name === 'public') {
@@ -430,6 +438,11 @@ class Packer
     protected function isLocal()
     {
         return ($this->force['current'] === false) && in_array($this->config['environment'], $this->config['ignore_environments'], true);
+    }
+
+    public static function isRemote($file)
+    {
+        return preg_match('#https?://#', $file);
     }
 
     /**
