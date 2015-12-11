@@ -57,6 +57,20 @@ class Packer
     private $provider;
 
     /**
+     * @var object;
+     */
+    private static $instance;
+
+    /**
+     * @param  array $config
+     * @return object
+     */
+    public static function getInstance(array $config)
+    {
+        return static::$instance ?: (static::$instance = new self($config));
+    }
+
+    /**
      * @param  array                      $config
      * @throws Exceptions\InvalidArgument
      * @return this
