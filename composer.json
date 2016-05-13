@@ -10,8 +10,8 @@
         }
     ],
     "require": {
-        "php": ">=5.4",
-        "imagecow/imagecow": "1.5.*"
+        "php": ">=5.5",
+        "imagecow/imagecow": "2.1.*"
     },
     "require-dev": {
         "phpunit/phpunit": "*",
