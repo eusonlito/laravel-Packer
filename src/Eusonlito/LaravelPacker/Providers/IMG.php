@@ -52,7 +52,7 @@ class IMG extends ProviderBase implements ProviderInterface
         $image = Image::fromFile($file);
 
         if ($this->settings['quality'] && !strstr($this->settings['transform'], 'quality,')) {
-            $image->setCompressionQuality($this->settings['quality']);
+            $image->quality($this->settings['quality']);
         }
 
         return $image->transform($this->settings['transform'])->getString();
