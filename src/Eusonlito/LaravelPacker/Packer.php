@@ -426,6 +426,10 @@ class Packer
         } else {
             $list = $this->storage.$this->name;
         }
+        
+        $this->files = [];
+        $this->storage = '';
+        $this->name = '';
 
         $this->force['current'] = $this->force['previous'];
 
