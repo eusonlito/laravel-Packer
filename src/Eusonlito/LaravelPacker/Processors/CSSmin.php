@@ -765,14 +765,17 @@ class CSSmin
      */
     private function normalize_int($size)
     {
-        if (is_string($size)) {
-            switch (substr($size, -1)) {
-                case 'M': case 'm': return $size * 1048576;
-                case 'K': case 'k': return $size * 1024;
-                case 'G': case 'g': return $size * 1073741824;
-            }
+        if (!is_string($size)) {
+            return (int)$size;
         }
 
-        return (int) $size;
+        $letter = substr($size, -1);
+        $size = (int)$size;
+
+        switch ($leter) {
+            case 'M': case 'm': return $size * 1048576;
+            case 'K': case 'k': return $size * 1024;
+            case 'G': case 'g': return $size * 1073741824;
+        }
     }
 }
