@@ -1,8 +1,10 @@
 <?php
+use PHPUnit\Framework\TestCase;
+
 use Eusonlito\LaravelPacker\Packer;
 use org\bovigo\vfs\vfsStream as fs;
 
-abstract class Base extends PHPUnit_Framework_TestCase
+abstract class Base extends TestCase
 {
     protected $Packer;
     protected $files = [];

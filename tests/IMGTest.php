@@ -3,16 +3,12 @@ class IMGTest extends Base
 {
     /** TESTS WITH ONE FILE **/
 
+    /**
+     * @expectedException ArgumentCountError
+     */
     public function testPackOneMissingArgument()
     {
-        $file = null;
-
-        try {
-            $file = $this->Packer->img('/resources/img/image-1.png')->getFilePath();
-            $this->fail('Must fail with missing argument');
-        } catch (Exception $e) {
-            $this->assertTrue(strstr($e->getMessage(), 'Missing argument 2') ? true : false, 'Must return missing argument');
-        }
+        $file = $this->Packer->img('/resources/img/image-1.png')->getFilePath();
 
         $this->assertTrue($file === null);
     }
@@ -30,11 +26,12 @@ class IMGTest extends Base
         $this->Packer->setConfig(['images_fake' => true]);
     }
 
+    /**
+     * @expectedException Eusonlito\LaravelPacker\Exceptions\InvalidArgument
+     */
     public function testPackMultipeException()
     {
         $file = null;
-
-        $this->setExpectedException('Eusonlito\LaravelPacker\Exceptions\InvalidArgument', 'supports strings');
 
         $file = $this->Packer->img([
             '/resources/img/image-1.png',
