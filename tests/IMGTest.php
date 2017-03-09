@@ -3,16 +3,6 @@ class IMGTest extends Base
 {
     /** TESTS WITH ONE FILE **/
 
-    /**
-     * @expectedException ArgumentCountError
-     */
-    public function testPackOneMissingArgument()
-    {
-        $file = $this->Packer->img('/resources/img/image-1.png')->getFilePath();
-
-        $this->assertTrue($file === null);
-    }
-
     public function testPackOneMissingFormat()
     {
         $file = null;
