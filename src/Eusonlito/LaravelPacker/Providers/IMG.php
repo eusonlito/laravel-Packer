@@ -64,6 +64,10 @@ class IMG extends ProviderBase implements ProviderInterface
      */
     public function tag($file)
     {
+        if (empty($file)) {
+            return '';
+        }
+
         $attributes = $this->settings['attributes'];
         $file = is_array($file) ? $file[0] : $file;
 
