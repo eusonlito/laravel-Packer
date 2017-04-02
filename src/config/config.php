@@ -31,7 +31,8 @@ return array(
     |--------------------------------------------------------------------------
     |
     | Set absolute folder path to public view from web. If you are using
-    | laravel, this value will be set with public_path() function
+    | laravel, set this value to null and will be set with public_path()
+    | function
     |
     */
 
@@ -43,8 +44,8 @@ return array(
     |--------------------------------------------------------------------------
     |
     | Set absolute URL location to asset folder. Many times will be same as
-    | public_path but using absolute URL. If you are using laravel, this value
-    | will be set with asset() function
+    | public_path but using absolute URL. If you are using laravel, set this
+    | value to null and will be set with asset() function
     |
     */
 
