@@ -59,8 +59,13 @@ class PackerServiceProvider extends ServiceProvider
             $config['environment'] = app()->environment();
         }
 
-        $config['public_path'] = public_path();
-        $config['asset'] = asset('');
+        if (empty($config['public_path'])) {
+            $config['public_path'] = public_path();
+        }
+
+        if (empty($config['asset'])) {
+            $config['asset'] = asset('');
+        }
 
         return $config;
     }
