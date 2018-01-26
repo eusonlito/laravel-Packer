@@ -28,5 +28,15 @@
             "src/Eusonlito/LaravelPacker/Exceptions.php"
         ]
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "stable",
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Eusonlito\\LaravelPacker\\PackerServiceProvider"
+            ],
+            "aliases": {
+                "Packer": "Eusonlito\\LaravelPacker\\Facade"
+            }      
+        }
+    }  
 }
