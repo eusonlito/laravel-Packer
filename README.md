@@ -58,37 +58,37 @@ Now you have a ```Packer``` facade available.
 <html>
     <head>
         // Pack a simple file
-        {{ Packer::css('/css/main.css', '/storage/cache/css/main.css') }}
+        {!! Packer::css('/css/main.css', '/storage/cache/css/main.css') !!}
 
         // Pack a simple file using cache_folder option as storage folder to packed file
-        {{ Packer::css('/css/main.css', 'css/main.css') }}
+        {!! Packer::css('/css/main.css', 'css/main.css') !!}
 
         // Packing multiple files
-        {{ Packer::css(['/css/main.css', '/css/bootstrap.css'], '/storage/cache/css/styles.css') }}
+        {!! Packer::css(['/css/main.css', '/css/bootstrap.css'], '/storage/cache/css/styles.css') !!}
 
         // Packing multiple files using cache_folder option as storage folder to packed file
-        {{ Packer::css(['/css/main.css', '/css/bootstrap.css'], 'css/styles.css') }}
+        {!! Packer::css(['/css/main.css', '/css/bootstrap.css'], 'css/styles.css') !!}
 
         // Packing multiple files with autonaming based
-        {{ Packer::css(['/css/main.css', '/css/bootstrap.css'], '/storage/cache/css/') }}
+        {!! Packer::css(['/css/main.css', '/css/bootstrap.css'], '/storage/cache/css/') !!}
 
         // pack and combine all css files in given folder
-        {{ Packer::cssDir('/css/', '/storage/cache/css/all.css') }}
+        {!! Packer::cssDir('/css/', '/storage/cache/css/all.css') !!}
 
         // pack and combine all css files in given folder using cache_folder option as storage folder to packed file
-        {{ Packer::cssDir('/css/', 'css/all.css') }}
+        {!! Packer::cssDir('/css/', 'css/all.css') !!}
 
         // Packing multiple folders
-        {{ Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/all.css') }}
+        {!! Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/all.css') !!}
 
         // Packing multiple folders with recursive search
-        {{ Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/all.css', true) }}
+        {!! Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/all.css', true) !!}
 
         // Packing multiple folders with recursive search and autonaming
-        {{ Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/', true) }}
+        {!! Packer::cssDir(['/css/', '/theme/'], '/storage/cache/css/', true) !!}
 
         // Packing multiple folders with recursive search and autonaming using cache_folder option as storage folder to packed file
-        {{ Packer::cssDir(['/css/', '/theme/'], 'css/', true) }}
+        {!! Packer::cssDir(['/css/', '/theme/'], 'css/', true) !!}
     </head>
 </html>
 ```
@@ -104,37 +104,37 @@ CSS `url()` values will be converted to absolute path to avoid file references p
     <body>
     ...
         // Pack a simple file
-        {{ Packer::js('/js/main.js', '/storage/cache/js/main.js') }}
+        {!! Packer::js('/js/main.js', '/storage/cache/js/main.js') !!}
 
         // Pack a simple file using cache_folder option as storage folder to packed file
-        {{ Packer::js('/js/main.js', 'js/main.js') }}
+        {!! Packer::js('/js/main.js', 'js/main.js') !!}
 
         // Packing multiple files
-        {{ Packer::js(['/js/main.js', '/js/bootstrap.js'], '/storage/cache/js/styles.js') }}
+        {!! Packer::js(['/js/main.js', '/js/bootstrap.js'], '/storage/cache/js/styles.js') !!}
 
         // Packing multiple files using cache_folder option as storage folder to packed file
-        {{ Packer::js(['/js/main.js', '/js/bootstrap.js'], 'js/styles.js') }}
+        {!! Packer::js(['/js/main.js', '/js/bootstrap.js'], 'js/styles.js') !!}
 
         // Packing multiple files with autonaming based
-        {{ Packer::js(['/js/main.js', '/js/bootstrap.js'], '/storage/cache/js/') }}
+        {!! Packer::js(['/js/main.js', '/js/bootstrap.js'], '/storage/cache/js/') !!}
 
         // pack and combine all js files in given folder
-        {{ Packer::jsDir('/js/', '/storage/cache/js/all.js') }}
+        {!! Packer::jsDir('/js/', '/storage/cache/js/all.js') !!}
 
         // pack and combine all js files in given folder using cache_folder option as storage folder to packed file
-        {{ Packer::jsDir('/js/', 'js/all.js') }}
+        {!! Packer::jsDir('/js/', 'js/all.js') !!}
 
         // Packing multiple folders
-        {{ Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/all.js') }}
+        {!! Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/all.js') !!}
 
         // Packing multiple folders with recursive search
-        {{ Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/all.js', true) }}
+        {!! Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/all.js', true) !!}
 
         // Packing multiple folders with recursive search and autonaming
-        {{ Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/', true) }}
+        {!! Packer::jsDir(['/js/', '/theme/'], '/storage/cache/js/', true) !!}
 
         // Packing multiple folders with recursive search and autonaming using cache_folder option as storage folder to packed file
-        {{ Packer::jsDir(['/js/', '/theme/'], 'js/', true) }}
+        {!! Packer::jsDir(['/js/', '/theme/'], 'js/', true) !!}
     </body>
 </html>
 ```
