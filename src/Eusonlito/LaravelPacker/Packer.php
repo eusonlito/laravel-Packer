@@ -223,6 +223,10 @@ class Packer
             'attributes' => $attributes
         ]);
 
+        if ($this->isRemote($file)) {
+            $file = $this->downloadRemote($file);
+        }
+
         if (!$this->provider->check($this->path('public', $file))) {
             $this->file = false;
 
@@ -303,7 +307,7 @@ class Packer
      */
     public function load($type, $files, $name)
     {
-        $this->files = is_array($files) ? $files : [$files];
+        $this->files = $this->downloadRemotes($files);
 
         if (strpos($name, '/') !== 0) {
             $name = $this->path('', $this->config['cache_folder'].'/'.$name);
@@ -318,22 +322,34 @@ class Packer
         }
 
         if ($this->files && !$this->isLocal() && ($this->config['check_timestamps'] === true)) {
-            $this->newer = max(array_map(function ($file) {
-                if (!static::isRemote($file) && is_file($file = $this->path('public', $file))) {
-                    return filemtime($file);
-                }
-            }, $this->files));
-
-            if (empty($this->newer)) {
-                $this->newer = md5(implode($this->files));
-            }
-
-            $this->name = $this->newer.'-'.$this->name;
+            $this->name = $this->checkNewer();
         }
 
         $this->file = $this->path('public', $this->storage.$this->name);
 
         return $this->process();
+    }
+
+    /**
+     * @param  mixed  $file
+     * @param  string $name
+     * @return string
+     */
+    protected function checkNewer($files, $name)
+    {
+        $filemtime = function ($file) {
+            if (is_file($file = $this->path('public', $file))) {
+                return filemtime($file);
+            }
+        };
+
+        $this->newer = max(array_map($filemtime, $files));
+
+        if (empty($this->newer)) {
+            $this->newer = md5(implode($files));
+        }
+
+        return $this->newer.'-'.$name;
     }
 
     /**
@@ -344,7 +360,7 @@ class Packer
      */
     public function path($name, $location = '')
     {
-        if (preg_match('#^https?://#', $location)) {
+        if ($this->isRemote($location)) {
             return $location;
         }
 
@@ -426,7 +442,7 @@ class Packer
         } else {
             $list = $this->storage.$this->name;
         }
-        
+
         $this->files = [];
         $this->storage = '';
         $this->name = '';
@@ -444,9 +460,58 @@ class Packer
         return ($this->force['current'] === false) && in_array($this->config['environment'], $this->config['ignore_environments'], true);
     }
 
-    public static function isRemote($file)
+    protected function isRemote($file)
     {
-        return preg_match('#https?://#', $file);
+        return strpos($file, 'http') === 0;
+    }
+
+    /**
+     * @param  mixed  $files
+     * @return array
+     */
+    protected function downloadRemotes($files)
+    {
+        $files = (array)$files;
+
+        foreach ($files as &$file) {
+            if ($this->isRemote($file)) {
+                $file = $this->downloadRemote($file);
+            }
+        }
+
+        return array_filter($files);
+    }
+
+    /**
+     * @param  string  $url
+     * @return string|null
+     */
+    protected function downloadRemote($url)
+    {
+        $uri = explode('?', $url)[0];
+
+        if (!pathinfo($uri, PATHINFO_EXTENSION)) {
+            return null;
+        }
+
+        $name = md5($url).'-'.basename($uri);
+
+        $path = $this->storage.$this->config['cache_folder'].$name;
+        $file = $this->path('public', $path);
+
+        if (is_file($file)) {
+            return $path;
+        }
+
+        if (!($contents = file_get_contents($url))) {
+            return null;
+        }
+
+        $this->checkDir(dirname($file));
+
+        file_put_contents($file, $contents);
+
+        return $path;
     }
 
     /**
