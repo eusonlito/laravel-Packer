@@ -2,7 +2,6 @@
 namespace Eusonlito\LaravelPacker\Providers;
 
 use CSSmin;
-use Eusonlito\LaravelPacker\Packer;
 
 class CSS extends ProviderBase implements ProviderInterface
 {
@@ -13,7 +12,7 @@ class CSS extends ProviderBase implements ProviderInterface
      */
     public function pack($file, $public)
     {
-        if (!Packer::isRemote($file) && !is_file($file)) {
+        if (!is_file($file)) {
             return sprintf('/* File %s not exists */', $file);
         }
 
