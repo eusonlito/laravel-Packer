@@ -322,7 +322,7 @@ class Packer
         }
 
         if ($this->files && !$this->isLocal() && ($this->config['check_timestamps'] === true)) {
-            $this->name = $this->checkNewer();
+            $this->name = $this->checkNewer($this->files, $this->name);
         }
 
         $this->file = $this->path('public', $this->storage.$this->name);
@@ -331,7 +331,7 @@ class Packer
     }
 
     /**
-     * @param  mixed  $file
+     * @param  array  $files
      * @param  string $name
      * @return string
      */
