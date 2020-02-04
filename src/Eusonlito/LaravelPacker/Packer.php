@@ -503,7 +503,7 @@ class Packer
             return $path;
         }
 
-        if (!($contents = file_get_contents($url))) {
+        if (!($contents = @file_get_contents($url))) {
             return null;
         }
 
