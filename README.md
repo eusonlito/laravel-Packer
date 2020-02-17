@@ -45,7 +45,7 @@ Begin by installing this package through Composer.
 Publish the config file:
 
 ```
-php artisan vendor:publish
+php artisan vendor:publish --provider="Eusonlito\LaravelPacker\PackerServiceProvider"
 ```
 
 Now you have a ```Packer``` facade available.
