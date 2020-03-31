@@ -17,7 +17,7 @@ class IMGTest extends Base
     }
 
     /**
-     * @expectedException Eusonlito\LaravelPacker\Exceptions\InvalidArgument
+     * @expectedException Eusonlito\LaravelPacker\Exceptions\InvalidArgumentException
      */
     public function testPackMultipeException()
     {
