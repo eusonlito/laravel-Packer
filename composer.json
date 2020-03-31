@@ -23,9 +23,6 @@
         },
         "classmap": [
             "src/Eusonlito/LaravelPacker/Processors/"
-        ],
-        "files": [
-            "src/Eusonlito/LaravelPacker/Exceptions.php"
         ]
     },
     "minimum-stability": "stable",
@@ -36,7 +33,7 @@
             ],
             "aliases": {
                 "Packer": "Eusonlito\\LaravelPacker\\Facade"
-            }      
+            }
         }
-    }  
+    }
 }
