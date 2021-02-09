@@ -423,6 +423,8 @@ class Packer
      */
     private function checkDir($dir)
     {
+        clearstatcache(true, $dir);
+
         if (is_dir($dir)) {
             return true;
         }
