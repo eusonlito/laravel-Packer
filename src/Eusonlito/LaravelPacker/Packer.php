@@ -387,7 +387,9 @@ class Packer
 
         $this->checkDir(dirname($this->file));
 
-        if (!($fp = @fopen($this->file, 'c'))) {
+        $tmp = tempnam(sys_get_temp_dir(), basename($this->file));
+
+        if (!($fp = @fopen($tmp, 'c'))) {
             throw new Exceptions\FileNotWritableException(sprintf('File %s can not be created', $this->file));
         }
 
@@ -396,6 +398,8 @@ class Packer
         }
 
         fclose($fp);
+
+        rename($tmp, $this->file);
 
         return $this;
     }
@@ -425,11 +429,7 @@ class Packer
     {
         clearstatcache(true, $dir);
 
-        if (is_dir($dir)) {
-            return true;
-        }
-
-        if (!@mkdir($dir, 0755, true)) {
+        if (!is_dir($dir) && !@mkdir($dir, 0755, true) && !is_dir($dir)) {
             throw new Exceptions\DirNotWritableException(sprintf('Folder %s can not be created', $dir));
         }
     }
