@@ -401,6 +401,8 @@ class Packer
 
         rename($tmp, $this->file);
 
+        chmod($this->file, 0644);
+
         return $this;
     }
 
