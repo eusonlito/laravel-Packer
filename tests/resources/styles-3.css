@@ -1,0 +1,11 @@
+html._TEST_INI_FILE3 {
+  font-size: 1em;
+}
+
+.span {
+  left: calc(50% - var(--gap, 10px) - var(--line-width, 50px));
+}
+
+html._TEST_END_FILE3 {
+  font-size: 1em;
+}

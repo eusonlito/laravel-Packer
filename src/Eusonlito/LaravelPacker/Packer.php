@@ -399,7 +399,9 @@ class Packer
 
         fclose($fp);
 
-        rename($tmp, $this->file);
+        copy($tmp, $this->file);
+
+        unlink($tmp);
 
         chmod($this->file, 0644);
 

@@ -109,6 +109,29 @@ class CSSTest extends Base
         $this->assertFileNotExists($file, sprintf('File %s not exists', $file));
     }
 
+    public function testPackMultipleIssuesDefaultRelative()
+    {
+        $file = $this->Packer->css([
+            '/resources/css/styles-1.css',
+            '/resources/css/styles-2.css',
+            '/resources/css/styles-3.css'
+        ], 'css/styles.css')->getFilePath();
+
+        $this->assertFileExists($file, sprintf('File %s was created successfully', $file));
+
+        $this->checkContents($file, [
+            '_TEST_INI_FILE1', '_TEST_END_FILE1',
+            '_TEST_INI_FILE2', '_TEST_END_FILE2',
+            '_TEST_INI_FILE3', '_TEST_END_FILE3'
+        ]);
+
+        unlink($file);
+
+        $file = $this->cache.'/css/styles.css';
+
+        $this->assertFileNotExists($file, sprintf('File %s not exists', $file));
+    }
+
     public function testPackMultipleDefaultAbsolute()
     {
         $file = $this->Packer->css([

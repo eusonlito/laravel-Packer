@@ -1,4 +1,9 @@
 <?php
+
+namespace Eusonlito\LaravelPacker\Processors\JS;
+
+use Exception;
+
 /**
  * JSMin.php - modified PHP implementation of Douglas Crockford's JSMin.
  *
@@ -54,7 +59,7 @@
  * @link http://code.google.com/p/jsmin-php/
  */
 
-class JSMin
+class Minify
 {
     const ORD_LF            = 10;
     const ORD_SPACE         = 32;
@@ -82,9 +87,7 @@ class JSMin
      */
     public static function minify($js)
     {
-        $jsmin = new JSMin($js);
-
-        return $jsmin->min();
+        return (new self($js))->min();
     }
 
     /**

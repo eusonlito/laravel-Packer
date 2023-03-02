@@ -1,7 +1,7 @@
 <?php
 namespace Eusonlito\LaravelPacker\Providers;
 
-use JSMin;
+use Eusonlito\LaravelPacker\Processors\JS\Minify;
 
 class JS extends ProviderBase implements ProviderInterface
 {
@@ -19,7 +19,7 @@ class JS extends ProviderBase implements ProviderInterface
         $contents = file_get_contents($file);
 
         if ($this->settings['minify']) {
-            $contents = JSMin::minify($contents);
+            $contents = (new Minify($contents))->min();
         }
 
         return ';'.$contents;
