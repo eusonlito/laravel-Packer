@@ -19,9 +19,9 @@ class Packer
     private $files = [];
 
     /**
-     * @var array
+     * @var bool|string
      */
-    private $paths = [];
+    private $file = false;
 
     /**
      * @var string
