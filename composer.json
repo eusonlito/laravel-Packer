@@ -1,6 +1,10 @@
 {
     "name": "eusonlito/laravel-packer",
-    "keywords": ["packer", "minify", "laravel"],
+    "keywords": [
+        "packer",
+        "minify",
+        "laravel"
+    ],
     "description": "A package for pack css and javascript files",
     "license": "MIT",
     "authors": [
@@ -14,7 +18,7 @@
         "imagecow/imagecow": "^2.4"
     },
     "require-dev": {
-        "phpunit/phpunit": "^7.5",
+        "phpunit/phpunit": "^7.5|^10.5",
         "mikey179/vfsstream": "^1.6"
     },
     "autoload": {
